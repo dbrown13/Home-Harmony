@@ -1,7 +1,24 @@
 h1 {
   padding-top: 10px;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Segoe Script";
   text-align: center;
+  font-size: 40px;
+}
+
+h2 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+label {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -36,6 +53,7 @@ main {
 
 .navbar li {
   float: left;
+  font-size: 20px;
 }
 
 .open-button {
