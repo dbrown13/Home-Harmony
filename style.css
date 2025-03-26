@@ -64,8 +64,8 @@ main {
   cursor: pointer;
   opacity: 0.8;
   position: fixed;
-  bottom: 23px;
-  right: 28px;
+  bottom: 550px;
+  right: 45px;
   width: 280px;
 }
 
@@ -114,4 +114,12 @@ main {
 
 .form-container .btn:hover, .open-buton:hover {
   opacity: 1;
+}
+
+#myContactForm {
+  display: none;
+}
+
+#myPhotoForm {
+  display: none;
 }

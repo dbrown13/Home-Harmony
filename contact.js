@@ -1,7 +1,7 @@
 function contactForm() {
-  document.getElementById("myForm").style.display = "block";
+  document.getElementById("myContactForm").style.display = "block";
 }
 
 function closeForm() {
-  document.getElementById("myForm").style.display = "none";
+  document.getElementById("myContactForm").style.display = "none";
 }

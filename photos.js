@@ -1,7 +1,7 @@
 function photoForm() {
-  document.getElementById("myForm").style.display = "block";
+  document.getElementById("myPhotoForm").style.display = "block";
 }
 
 function closeForm() {
-  document.getElementById("myForm").style.display = "none";
+  document.getElementById("myPhotoForm").style.display = "none";
 }
