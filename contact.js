@@ -1,4 +1,4 @@
-function photoForm() {
+function contactForm() {
   document.getElementById("myForm").style.display = "block";
 }
 

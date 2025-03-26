@@ -1,0 +1,44 @@
+<html>
+  <head>
+
+
+    <title>Home Harmony</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Home Harmony</h1>
+
+    <nav class="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="rooms.html">Rooms</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h3>This is the Photos page.</h3>
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, quo. Voluptate aliquid ad tenetur aliquam culpa tempora! Commodi nihil ipsa, eveniet expedita magni veniam aliquid minus quis ab nemo hic?</p>
+      <button class="open-button" onClick="photoForm()">Upload Photo</button>
+      <div class="photo-form">
+        <form action="/action_page.php" class="form-container" id="myForm">
+          <h1>Save a Photo</h1>
+          <label for="photo"><b>Photo Name</b></label>
+          <input type="text" placeholder="Name your photo" name="photo" required>
+
+          <label for="file"><b>File Upload</b></label>
+          <input type="file" id="fileInput" name="file">
+
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
+        </form>
+      </div>
+
+      <div class="photo-container">
+        <!-- where photos will be listed -->
+      </div>
+    </main>
+    <script src="photos.js"></script>
+  </body>
+</html>
