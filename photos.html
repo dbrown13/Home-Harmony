@@ -22,12 +22,12 @@
       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempore, quo. Voluptate aliquid ad tenetur aliquam culpa tempora! Commodi nihil ipsa, eveniet expedita magni veniam aliquid minus quis ab nemo hic?</p>
       <button class="open-button" onClick="photoForm()">Upload Photo</button>
       <div class="photo-form"  id="myPhotoForm">
-        <form action="/action_page.php" class="form-container">
+        <form action="upload.php" class="form-container" method="post">
           <h2>Save a Photo</h2>
           <label for="photo"><b>Photo Name</b></label>
           <input type="text" placeholder="Name your photo" name="photo" required>
 
-          <label for="file"><b>File Upload</b></label>
+          <label for="file-upload" class="custom-file-upload btn"><b>File Upload</b></label>
           <input type="file" id="fileInput" name="file">
 
           <button type="submit" class="btn">Submit</button>
