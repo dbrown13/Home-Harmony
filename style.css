@@ -2,7 +2,9 @@ h1 {
   padding-top: 10px;
   font-family: "Segoe Script";
   text-align: center;
-  font-size: 40px;
+  font-size: 45px;
+  color: white;
+  text-shadow: 3px 3px black;
 }
 
 h2 {
@@ -10,11 +12,16 @@ h2 {
 }
 
 h3 {
-  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  padding: 10px;
+  font-size: 30px;
+  font-family: "Segoe Script";
 }
 
 p {
+  text-align: center;
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
 }
 
 label {
@@ -63,10 +70,9 @@ main {
   border: none;
   cursor: pointer;
   opacity: 0.8;
-  position: fixed;
-  bottom: 550px;
-  right: 45px;
   width: 280px;
+  position: absolute;
+  margin: 0;
 }
 
 .form-popup {
