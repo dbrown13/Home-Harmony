@@ -63,6 +63,12 @@ main {
   font-size: 20px;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 .open-button {
   background-color: #555;
   color: white;
@@ -71,8 +77,6 @@ main {
   cursor: pointer;
   opacity: 0.8;
   width: 280px;
-  position: absolute;
-  margin: 0;
 }
 
 .form-popup {

@@ -19,20 +19,22 @@
 
     <main>
       <h3>Your Photos</h3>
-      <button class="open-button" onClick="photoForm()">Upload Photo</button>
-      <div class="photo-form"  id="myPhotoForm">
-        <form action="upload.php" class="form-container" method="post">
-          <h2>Save a Photo</h2>
-          <label for="photo"><b>Photo Name</b></label>
-          <input type="text" placeholder="Name your photo" name="photo" required>
+        <div class="container">
+          <button class="open-button" onClick="photoForm()">Upload Photo</button>
+          <div class="photo-form"  id="myPhotoForm">
+            <form action="upload.php" class="form-container" method="post">
+              <h2>Save a Photo</h2>
+              <label for="photo"><b>Photo Name</b></label>
+              <input type="text" placeholder="Name your photo" name="photo" required>
 
-          <label for="file-upload" class="custom-file-upload btn"><b>File Upload</b></label>
-          <input type="file" id="fileInput" name="file">
+              <label for="file-upload" class="custom-file-upload btn"><b>File Upload</b></label>
+              <input type="file" id="fileInput" name="file">
 
-          <button type="submit" class="btn">Submit</button>
-          <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
-        </form>
-      </div>
+              <button type="submit" class="btn">Submit</button>
+              <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
+            </form>
+          </div>
+        </div>
 
       <div class="photo-container">
         <!-- where photos will be listed -->
