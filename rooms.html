@@ -19,7 +19,21 @@
 
     <main>
       <h3>Design your Room</h3>
-      <button>Design a Room</button>
+      <button class="open-button" onClick="roomForm()">Design a Room</button>
+
+      <div class="room-form"  id="myRoomForm">
+        <form action="/action_page.php" class="form-container" method="post">
+          <h2>Design a Room</h2>
+          <label for="room"><b>Room Name</b></label>
+          <input type="text" placeholder="Name the room" name="room" required>
+
+          <label for="Design plan"><b>Design Idea</b></label>
+          <input type="text" placeholder="Enter your idea" name="design-plan" required>
+
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
+        </form>
+      </div>
     </main>
     <script src="rooms.js"></script>
   </body>
