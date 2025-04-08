@@ -9,7 +9,7 @@ from fastapi.security import OAuth2, OAuth2AuthorizationCodeBearer
 # Other Imports
 from typing import Annotated, Union, List
 from sqlite3 import Connection, Row
-from database import get_user_projects, get_project_by_id, create_user, get_user, delete_user
+from database import get_user_projects, get_project_by_id, create_user, get_user, delete_user, delete_project_by_id, create_new_project
 from models import Project, Projects, UserProjectId, User, UserHashed, UserID
 from secrets import token_hex
 from passlib.hash import pbkdf2_sha256
@@ -74,6 +74,7 @@ async def add_user(request: Request, username : Annotated[str, Form()], password
     # create decor table for user
     return RedirectResponse("./login", status_code=status.HTTP_303_SEE_OTHER)
 
+
 @app.get("/login")
 async def login(request: Request)->HTMLResponse:
     return templates.TemplateResponse(request, "./login.html", context={})
@@ -121,11 +122,43 @@ async def get_projects(request: Request, user_id: int  = Depends(oauth_cookie))-
     projects = get_user_projects(connection, user_id)
     return templates.TemplateResponse(request, "./projects.html", context=projects.model_dump())
 
+@app.get("/add_project")
+async def create_project(request: Request, user_id: int = Depends(oauth_cookie))->HTMLResponse:
+    print(f"user_id: {user_id} is requesting to add a new project")
+    return templates.TemplateResponse(request, "./add_project.html", context={})
+
+@app.post("/add_project")
+async def add_project(request: Request, proj_title : Annotated[str, Form()], proj_desc : Annotated[str, Form()], user_id : int  = Depends(oauth_cookie)):
+    print(f"user_id: {user_id} is adding project with title: {proj_title}, description: {proj_desc}")
+    project = UserProjectId(
+        project_title = proj_title,
+        project_desc = proj_desc,
+        user_id = user_id
+    )
+    create_new_project(connection, project)
+    return RedirectResponse("/add_project", status_code=status.HTTP_303_SEE_OTHER)
+
 @app.get("/edit_project/{proj_id}")
 async def edit_project(request: Request, proj_id: int)->HTMLResponse:
+    print(f"User is requesting to edit project with id: {proj_id}")
     projects = get_project_by_id(connection, proj_id)
     #project = {
     #    'project_title' : 'test project',
     #    'project_desc' : 'test description'
     #}
     return templates.TemplateResponse(request, "./edit_project.html", context=projects.model_dump())
+
+# Ask user for verification of delete before deleting a project
+@app.get("/confirm_delete/{proj_id}")
+async def confirm_delete(request: Request, proj_id: int)->HTMLResponse:
+    print(f"Confirm delete of project with id: {proj_id}")
+    project = get_project_by_id(connection, proj_id)
+    print(project)
+    return templates.TemplateResponse(request, "./confirm_delete.html", context={"request": request, "proj_id": proj_id, "proj_name": project.project_title})
+
+@app.delete("/delete_project/{proj_id}")
+async def delete_project(request: Request, proj_id: int)->HTMLResponse:
+    print(f"User is requesting to delete project with id: {proj_id}")
+
+    delete_project_by_id(connection, proj_id)
+    return RedirectResponse("/projects", status_code=status.HTTP_303_SEE_OTHER)

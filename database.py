@@ -51,9 +51,10 @@ def delete_user(connection: Connection,
     return True
                 
 
-def insert_project(connection: Connection, 
+def create_new_project(connection: Connection, 
                    project: UserProjectId):
     with connection:
+        print(f"Creating new project: {project}")
         cur = connection.cursor()
         cur.execute(
             """
@@ -90,7 +91,7 @@ def get_user_projects(connection: Connection, user_id: int)->Projects:
         return Projects(projects = [Project.model_validate(dict(project)) for project in cur])
         #return cur.fetchall()
 
-def get_project_by_id(connection: Connection, proj_id: int)->Projects:
+def get_project_by_id(connection: Connection, proj_id: int)->Project:
     with connection:
         cur = connection.cursor()
         cur.execute(
@@ -98,10 +99,26 @@ def get_project_by_id(connection: Connection, proj_id: int)->Projects:
             SELECT project_title, project_desc, user_id, project_id
             FROM projects
             WHERE project_id = ?
+            LIMIT 1
             """,
             (proj_id,),
         )
-        return Projects(projects = [Project.model_validate(dict(project)) for project in cur])
+        #return cur.fetchone()
+        return Project.model_validate(dict(cur.fetchone()))
+    
+def delete_project_by_id(connection: Connection, proj_id: int)->bool:
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            DELETE FROM projects
+            WHERE project_id = ?
+            """,
+            (proj_id,),
+        )
+        connection.commit()
+        #return Projects(projects = [Project.model_validate(dict(project)) for project in cur])
+        return True
 
 def add_decor(connection: Connection, decor: Decor)->bool:
     with connection:
@@ -129,9 +146,9 @@ if __name__ == "__main__":
     #projects = get_user_projects(connection=connection, user_id=4)
     #for project in projects:
     #    print(dict(project))
-    #projects = get_project_by_id(connection=connection, proj_id=2)
-    #print(projects.model_dump())
+    project = get_project_by_id(connection=connection, proj_id=2)
+    print(project.model_dump())
     #user = get_user(connection, 'dibrown2')
     #print(user)
-    decor = Decor(decor_name='test decor', decor_type='wall', decor_desc='test decor description', user_id=1, project_id=1)
-    print(add_decor(connection=connection, decor=decor))
+    #decor = Decor(decor_name='test decor', decor_type='wall', decor_desc='test decor description', user_id=1, project_id=1)
+    #print(add_decor(connection=connection, decor=decor))

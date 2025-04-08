@@ -10,7 +10,15 @@
     >
 </head>
 <body>
+    <div id="content">
     <h1 class="title">Manage Projects</h1>
+        {% if not projects %}
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-header-title">No projects found.</p>
+                </div>
+            </div>
+        {% endif %}
         {% for project in projects %}
         <div class="card">
             <div class="card-header">
@@ -32,10 +40,19 @@
             </div>
             <footer class="card-footer">
                 <a href="/edit_project/{{ project.project_id }}" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
+                <a href hx-get="/confirm_delete/{{ project.project_id }}"
+                hx-target="#modal-container" 
+                hx-swap="innerHTML" 
+                class="card-footer-item">Delete Me</a>
             </footer>
+
+
+            <div id="modal-container">
+
+            </div>
         </div>
         {% endfor %}
     </div>
 </body>
+<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 </html>
