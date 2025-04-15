@@ -19,6 +19,13 @@
 
     <main>
       <h3>Design your Room</h3>
+      <div class="card">
+        <div class="card-container">
+          <h4>This will be a room card</h4>
+          <p>This will be the details given in the form</p>
+        </div>
+      </div>
+      <br></br>
       <button class="open-button" onClick="roomForm()">Design a Room</button>
 
       <div class="room-form"  id="myRoomForm">
@@ -27,8 +34,40 @@
           <label for="room"><b>Room Name</b></label>
           <input type="text" placeholder="Name the room" name="room" required>
 
-          <label for="Design plan"><b>Design Idea</b></label>
+          <label for="Design plan"><b>Room Theme:</b></label>
           <input type="text" placeholder="Enter your idea" name="design-plan" required>
+          
+          <label for="Number of walls">Number of Walls to Decorate:</label>
+          <select type="drop-down" name="drop-down">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label for="Furniture">Furniture to Add:</label>
+          <select type="drop-down" name="drop-down">
+            <option value="placeholder">...</option>
+            <option value="couch">Couch</option>
+            <option value="desk">Desk</option>
+            <option value="chair">Chair</option>
+            <option value="bed">Bed</option>
+            <option value="nightstand">Nightstand</option>
+            <option value="table">Table</option>
+          </select>
+          <label for="Number of Furniture Pieces">Quantity:</label>
+          <select type="drop-down" name="drop-down">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="Other">Other</option>
+          </select>
+          <br></br>
+
 
           <button type="submit" class="btn">Submit</button>
           <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
