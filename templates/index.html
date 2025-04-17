@@ -25,6 +25,7 @@
                 Harmonize your life!
             </h2>
             <hr>
+            {% if login %}
             <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
                   <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
@@ -37,16 +38,12 @@
                 <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                     <div class="dropdown-content">
                         <div class="dropdown-item">
-                            <p>
-                                Create a new project  
-                            </p>
+                            <a href="/add_project" class="dropdown-item">Create a new project</a>
                         </div>
                     </div>
                     <div class="dropdown-content">
                         <div class="dropdown-item">
-                            <p>
-                                Manage existing projects
-                            </p>
+                            <a href="/projects" class="dropdown-item">Manage existing projects</a>
                         </div>
                     </div>
                     <hr class="dropdown-divider">
@@ -68,6 +65,10 @@
                   </div>
                 </div>
             </div>
+            {% else %}
+            <a href="/login" class="button is-primary">Login</a>
+            <a href="/register" class="button is-light">Register</a>
+            {% endif %}
         </div>
     </div>
 </body>
