@@ -38,14 +38,17 @@
                 </div>
                 <br>
                 <input class="button is-primary" type="submit">
+
             </form>
             {% if incorrect_username %}
                 <div>
                     <p><b>Username not found. Please try again.</b></p>
+                    <a href="/signup" class="button is-light">Sign up</a>
                 </div>
             {% elif incorrect_password %}
                 <div>
                     <p><b>Password incorrect. Please try again.</b></p>
+                    <a href="/signup" class="button is-light">Sign up</a>
                 </div>
             {% endif %}
         </div>
