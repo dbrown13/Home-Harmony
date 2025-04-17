@@ -106,6 +106,23 @@ def get_project_by_id(connection: Connection, proj_id: int)->Project:
         )
         #return cur.fetchone()
         return Project.model_validate(dict(cur.fetchone()))
+
+def update_project_by_id(
+        connection: Connection, 
+        project: Project)->bool:
+    
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            UPDATE projects
+            SET project_title =?, project_desc =?
+            WHERE project_id =?
+            """,
+            (project.project_title, project.project_desc, project.project_id)
+        )
+        connection.commit()
+        return True
     
 def delete_project_by_id(connection: Connection, proj_id: int)->bool:
     with connection:

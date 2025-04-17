@@ -10,8 +10,9 @@ from fastapi.security import OAuth2
 # Other Imports
 from typing import Annotated
 from sqlite3 import Connection, Row
-from database import get_user_projects, get_project_by_id, create_user, get_user, delete_user, delete_project_by_id, create_new_project, insertBLOB, readBlobData_by_id
-from models import UserProjectId, UserHashed, UserID, UserImage, Images 
+from database import get_user_projects, get_project_by_id, create_user, get_user, delete_user, delete_project_by_id
+from database import create_new_project, insertBLOB, readBlobData_by_id, update_project_by_id 
+from models import UserProjectId, UserHashed, UserID, UserImage, Project 
 from secrets import token_hex
 from passlib.hash import pbkdf2_sha256
 import jwt as jwt
@@ -129,6 +130,13 @@ async def login_user(request: Request, username : Annotated[str, Form()], passwo
                         )
     return response
 
+@app.get("/logout")
+async def logout(
+    request: Request, 
+    access_token: Annotated[str | None, Cookie()] = None):
+    response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
+    response.delete_cookie("access_token")
+    return response
 
 @app.delete("/delete_acct")
 async def delete_acct(user: UserID):
@@ -186,6 +194,23 @@ async def edit_project(request: Request, proj_id: int)->HTMLResponse:
 
     context = {"images": images, "project": project, "login": True}
     return templates.TemplateResponse(request, "./edit_project.html", context=context)
+
+@app.post("/edit_project/{proj_id}")
+async def edit_project(
+    request: Request,
+    project_title : Annotated[str, Form()], 
+    project_desc : Annotated[str, Form()],
+    user_id : int  = Depends(oauth_cookie))-> HTMLResponse:
+    project_id = request.path_params["proj_id"]
+    print(f"User is editing project with id: {project_id} and new title: {project_title}, description: {project_desc}")
+    project = Project(
+        project_id = project_id,
+        project_title = project_title,
+        project_desc = project_desc,
+        user_id = user_id)
+    print(project)
+    update_project_by_id(connection, project)
+    return RedirectResponse("/projects", status_code=status.HTTP_303_SEE_OTHER)
 
 # Ask user for verification of delete before deleting a project
 @app.get("/confirm_delete/{proj_id}")
