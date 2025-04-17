@@ -1,3 +1,6 @@
+<script type="text/javascript">
+
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,31 +14,56 @@
 </head>
 <body>
     <h1 class="title">Edit Project</h1>
-        {% for project in projects %}
+    <h2 class="subtitle">Project Details</h2>
+    <p>Project ID: {{ project.project_id }}</p>
+    <p>Project Name: {{ project.project_title }}</p>
+    <p>Project Description: {{ project.project_desc }}</p>
+
+
         <div class="card">
             <div class="card-header">
                 <header class="card-header"></header>
                     <p class="card-header-title">Project Title: {{ project.project_title }}</p>
             </div>
             <div class="card-content">
-                <div class="card-image">
+<!--                 <div class="card-image">
                     <figure class="image is-5by4">
                         <img 
                             src="https://bulma.io/assets/images/placeholders/600x480.png"
                             alt="Placeholder image"
                         />
                     </figure>
-                </div>
+                </div> -->
                 <p>Description: {{ project.project_desc }}</p>
-                <p>Project ID: {{ project.project_id }}</p>
-                <p>User ID: {{ project.user_id }}</p>
             </div>
             <footer class="card-footer">
-                <a href="/edit_project/{{ project.project_id }}" class="card-footer-item">Edit</a>
-                <a href="/delete_project/{{ project.project_id }}" class="card-footer-item">Delete</a>
+                <a href="/upload/{{ project.project_id }}" 
+                    class="card-footer-item">Upload Image</a>
+                <a href hx-get="/delete_project/{{ project.project_id }}"
+                    class="card-footer-item"
+                    hx-confirm="Are you sure you want to delete this project?">Delete Project</a>
             </footer>
         </div>
-        {% endfor %}
-    </div>
+
+        {% for image in images.images %}
+        <p>{{ image.image_id }}</p>
+        <p>{{ image.image_title }}</p>
+        <p>{{ image.image_desc }}</p>
+        <div class="card">
+            <div class="card-image">
+                <figure>
+                    <img 
+                        src="data:image/{{ image.image_type}};base64,{{ image.image_data }}"
+                        alt="Project Image"
+                        style="max-width: auto; height: 50%;"
+                    />
+                </figure>
+            </div>
+            <footer class="card-footer">
+                <a href="/delete_image/{{ image.image_id }}" 
+                    class="card-footer-item">Delete Image</a>
+            </footer>
+        </div>
+            {% endfor %}
 </body>
 </html>

@@ -1,0 +1,56 @@
+<script type="text/javascript">
+    function previewFile() {
+        const preview = document.querySelector('img');
+        var file = document.getElementById('fileInput').files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", function() {
+            preview.src = reader.result; // show image in <img> tag
+        }, false);
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function uploadFile(file) {
+        const access_token = '{{ access_token }}'; // replace with your access token
+        const proj_id = '{{ proj_id }}';
+        var file = document.getElementById('fileInput').files[0];
+        var image_title = document.getElementById('image_title').value;
+        var image_desc = document.getElementById('imageDescription').value;
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('image_title', image_title);
+            formData.append('image_desc', image_desc);
+            formData.append('proj_id', proj_id);
+            formData.append('access_token', access_token);
+            fetch('/upload/{{ proj_id }}', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("serverMsg").innerHTML = data.message;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+</script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+>
+<h1 class="title">Add Image</h1>
+<form>
+    <label class="label">Image Title:</label>
+    <input class="input" type="text" id="image_title" name="image_title" placeholder="Enter image title ..."><br>
+    <label class="label">Image Description</label>
+    <textarea class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea><br>
+    <input class="button" type="file" id="fileInput" onchange="previewFile()"><br>
+    <br>
+    <input class="button" type="button" value="Upload Image" onclick="uploadFile()">
+</form>
+<p id="serverMsg"></p>
+<img height="200">
