@@ -106,6 +106,23 @@ def get_project_by_id(connection: Connection, proj_id: int)->Project:
         )
         #return cur.fetchone()
         return Project.model_validate(dict(cur.fetchone()))
+
+def update_project_by_id(
+        connection: Connection, 
+        project: Project)->bool:
+    
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            UPDATE projects
+            SET project_title =?, project_desc =?
+            WHERE project_id =?
+            """,
+            (project.project_title, project.project_desc, project.project_id)
+        )
+        connection.commit()
+        return True
     
 def delete_project_by_id(connection: Connection, proj_id: int)->bool:
     with connection:
@@ -182,6 +199,7 @@ def writeTofile(data, filename):
         print("Stored blob data into ", filename, "\n")
 
 def readBlobData_by_id(connection: Connection, proj_id : int)->None:
+    print("Fetching BLOB data from project_id: ", proj_id)
     with connection:
         cur = connection.cursor()
 
@@ -207,6 +225,22 @@ def readBlobData_by_id(connection: Connection, proj_id : int)->None:
                      "user_id": user_id}
             image_list.append(ImageRetrieve.model_validate(image))
         images = dict(images=image_list)   
+        return images
+    
+def delete_image_by_id(connection: Connection, project_id: int, image_id: int)->bool:
+    print("Deleting image_id: ", image_id, " from project_id: ", project_id)
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            DELETE FROM images
+            WHERE image_id = ?
+            """,
+            (image_id,),
+        )
+        connection.commit()
+
+        images = readBlobData_by_id(connection=connection, proj_id=project_id)
         return images
     
 if __name__ == "__main__":

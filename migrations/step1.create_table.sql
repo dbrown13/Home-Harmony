@@ -1,3 +1,4 @@
+
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS images;
@@ -22,6 +23,7 @@ CREATE TABLE images (
     image_title VARCHAR(50) NOT NULL,
     image_desc VARCHAR(500),
     image_data blob NOT NULL,
+    image_type text not null,
     user_id INTEGER NOT NULL,
     project_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,

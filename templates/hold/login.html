@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Harmony - Sign Up</title>
+    <title>Home Harmony - Log in</title>
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
@@ -17,13 +17,13 @@
                 <img class="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" />
             </figure>
             <br>
-            <h1 class="title">Sign up for Home Harmony!</h1>
+            <h1 class="title">Log in to Home Harmony!</h1>
         </div>
-    </div>
+    </div> 
     <hr>
     <div class="columns">
         <div class="column is-half is-offset-one-quarter">
-            <form action="/signup" method="post">
+            <form action="/login" method="post">
                 <div class="field">
                     <label class="label" for="username">Username</label>
                     <div class="control">
@@ -38,14 +38,20 @@
                 </div>
                 <br>
                 <input class="button is-primary" type="submit">
+
             </form>
-            {% if taken %}
-                <div><b>Username {{ username }} is taken.  Pick a new username.</b></div>
+            {% if incorrect_username %}
+                <div>
+                    <p><b>Username not found. Please try again.</b></p>
+                    <a href="/signup" class="button is-light">Sign up</a>
+                </div>
+            {% elif incorrect_password %}
+                <div>
+                    <p><b>Password incorrect. Please try again.</b></p>
+                    <a href="/signup" class="button is-light">Sign up</a>
+                </div>
             {% endif %}
-            <hr>
-            <p>Already signed up?  <a href="/">Log in here!</a></p>
         </div>
     </div>
-    <br>
 </body>
 </html>

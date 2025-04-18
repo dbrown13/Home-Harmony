@@ -16,42 +16,36 @@
     <h1 class="title">Edit Project</h1>
     <h2 class="subtitle">Project Details</h2>
     <p>Project ID: {{ project.project_id }}</p>
-    <p>Project Name: {{ project.project_title }}</p>
-    <p>Project Description: {{ project.project_desc }}</p>
-
-
-        <div class="card">
-            <div class="card-header">
-                <header class="card-header"></header>
-                    <p class="card-header-title">Project Title: {{ project.project_title }}</p>
+    <form action="/edit_project/{{ project.project_id }}" method="post">
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label for="project_title" class="label">Project Title</label>
+                    <input class="input" name="project_title" value="{{ project.project_title }}">
+                </div>
             </div>
-            <div class="card-content">
-<!--                 <div class="card-image">
-                    <figure class="image is-5by4">
-                        <img 
-                            src="https://bulma.io/assets/images/placeholders/600x480.png"
-                            alt="Placeholder image"
-                        />
-                    </figure>
-                </div> -->
-                <p>Description: {{ project.project_desc }}</p>
+            <div class="column">
+                <div class="field">
+                    <label for="project_desc" class="label">Project Description</label>
+                    <textarea class="textarea" name="project_desc">{{ project.project_desc }}</textarea>
+                </div>
             </div>
-            <footer class="card-footer">
-                <a href="/upload/{{ project.project_id }}" 
-                    class="card-footer-item">Upload Image</a>
-                <a href hx-get="/delete_project/{{ project.project_id }}"
-                    class="card-footer-item"
-                    hx-confirm="Are you sure you want to delete this project?">Delete Project</a>
-            </footer>
         </div>
+        <div class="field">
+            <button type="submit" class="button is-success">Save Changes</button>
+            <a href="/upload/{{ project.project_id }}" class="button is-primary">Upload Image</a>
+            <a href="/projects" class="button is-light" onclick="window.history.back()">Cancel</a>
+        </div>
+    </form>
 
-        {% for image in images.images %}
+
+    {% for image in images.images %}
         <p>{{ image.image_id }}</p>
         <p>{{ image.image_title }}</p>
         <p>{{ image.image_desc }}</p>
         <div class="card">
             <div class="card-image">
-                <figure>
+                <figure id="content">
                     <img 
                         src="data:image/{{ image.image_type}};base64,{{ image.image_data }}"
                         alt="Project Image"
@@ -60,10 +54,9 @@
                 </figure>
             </div>
             <footer class="card-footer">
-                <a href="/delete_image/{{ image.image_id }}" 
-                    class="card-footer-item">Delete Image</a>
+                <a href="/delete_image/{{ project.project_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a>
             </footer>
         </div>
-            {% endfor %}
+    {% endfor %}
 </body>
 </html>

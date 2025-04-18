@@ -50,7 +50,8 @@
     <textarea class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea><br>
     <input class="button" type="file" id="fileInput" onchange="previewFile()"><br>
     <br>
-    <input class="button" type="button" value="Upload Image" onclick="uploadFile()">
+    <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
+    <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
 </form>
 <p id="serverMsg"></p>
 <img height="200">
