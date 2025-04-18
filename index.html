@@ -1,77 +1,58 @@
-<html>
-  <head>
-
-
-    <title>Home Harmony</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1 class="app-title">Home Harmony</h1>
-    <nav class="navbar">
-    <!-- <nav class="navbar-divider is-fixed-top">
-      <div class="navbar-start">
-        <a class="navbar-item" href="index.html">Home</a>
-        <a class="navbar-item" href="rooms.html">Rooms</a>
-        <a class="navbar-item" href="photos.html">Photos</a>
-        <a class="navbar-item" href="contact.html">Contact</a>
-      </div> -->
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <div class="dropdown">
-          <button style="font-size: 20px;" class="dropbtn">Rooms<i class=fa fa-caret-down></i></button>
-          <div class="dropdown-content">
-            <li><a href="rooms.html">See Rooms</a></li>
-            <li><a href="addRoom.html">Add a Room</a></li>
-            <li><a href="editRoom.html">Edit a Room</a></li>
-          </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Log in</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column is-four-fifths is-offset-one-fifth">
+            <figure class="image is-128x128">
+                <img class="is-rounded" src="https://bulma.io/assets/images/placeholders/128x128.png" />
+            </figure>
+            <br>
+            <h1 class="title">Log in to Home Harmony!</h1>
         </div>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li style="float:right"><a href="login.html">Login</a></li>
-      </ul>
-    </nav>
+    </div> 
+    <hr>
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            <form action="/login" method="post">
+                <div class="field">
+                    <label class="label" for="username">Username</label>
+                    <div class="control">
+                        <input class="input" type="text" name="username" placeholder="Enter username ...">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="password">Password</label>
+                    <div class="control">
+                        <input class="input" type="password" name="password" placeholder="Enter password ...">
+                    </div>
+                </div>
+                <br>
+                <input class="button is-primary" type="submit">
 
-    <main>
-      <script src="index.js"></script>
-      <br></br>
-      <div class="slider">
-        <a href="#slide-1">1</a>
-        <a href="#slide-2">2</a>
-        <a href="#slide-3">3</a>
-        <a href="#slide-4">4</a>
-        <a href="#slide-5" >5</a>
-
-        <div class="slides">
-          <div id="slide-1">
-            <img src="./images/home-photo1.jpg">
-          </div>
-          <div id="slide-2">
-            <img src="./images/home-photo2.jpg">
-          </div>
-          <div id="slide-3">
-            <img src="./images/home-photo3.jpg">
-          </div>
-          <div id="slide-4">
-            <img src="./images/home-photo4.jpg">
-          </div>
-          <div id="slide-5">
-            <img src="./images/home-photo5.jpg">
-          </div>
+            </form>
+            {% if incorrect_username %}
+                <div>
+                    <p><b>Username not found. Please try again.</b></p>
+                    <a href="/signup" class="button is-light">Sign up</a>
+                </div>
+            {% elif incorrect_password %}
+                <div>
+                    <p><b>Password incorrect. Please try again.</b></p>
+                </div>
+            {% endif %}
+            <hr>
+            <p>No account?  <a href="/signup">Sign up here!</a></p>
         </div>
-      </div>
-
-       <br></br>
-       <br></br>
-
-      <h3>Where all of your decoration and design ideas are brought to life!</h3>
-    </main>
-    <div class="list-of-projects">
-      <h4>Your Current Projects:</h4>
-      <ul>
-        <!-- Where we will post current projects -->
-        <li>Project 1</li>
-        <li>Project 2</li>
-        <li>Project 3</li>
-      </ul>
     </div>
+</body>
 </html>
