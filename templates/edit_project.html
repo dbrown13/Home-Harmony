@@ -45,7 +45,7 @@
         <p>{{ image.image_desc }}</p>
         <div class="card">
             <div class="card-image">
-                <figure>
+                <figure id="content">
                     <img 
                         src="data:image/{{ image.image_type}};base64,{{ image.image_data }}"
                         alt="Project Image"
@@ -54,8 +54,7 @@
                 </figure>
             </div>
             <footer class="card-footer">
-                <a href="/delete_image/{{ image.image_id }}" 
-                    class="card-footer-item">Delete Image</a>
+                <a href="/delete_image/{{ project.project_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a>
             </footer>
         </div>
     {% endfor %}
