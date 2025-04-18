@@ -56,7 +56,7 @@ if oauth_cookie == '401':
 
 
 @app.get("/")
-async def home(
+async def root(
     request: Request, access_token: Annotated[str |None, Cookie()] = None
 )->HTMLResponse:
     context = {}
@@ -119,7 +119,7 @@ async def login_user(request: Request, username : Annotated[str, Form()], passwo
         }, 
         SECRET_KEY, algorithm=ALGORITHM)
         
-    response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
+    response = RedirectResponse("/home", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie("access_token", 
                         f"Bearer {token}",
                         samesite='lax',
@@ -143,6 +143,24 @@ async def delete_acct(user: UserID):
     # delete all decor tables for user
     delete_user(connection, user.user_id)
 
+@app.get("/home")
+async def home(
+    request: Request,
+    access_token: Annotated[str | None, Cookie()] = None,
+)->HTMLResponse:
+    user_id = None
+    if access_token:
+        user_id = decrypt_access_token(access_token)
+        if user_id:
+            user_id = user_id["user_id"]
+            print(f"user_id: {user_id} is viewing home")
+    assert isinstance(user_id, int) or user_id is None, "Invalid access token"
+    context = get_user_projects(connection, user_id).model_dump()
+    #if len(context["projects"]) == 0:
+    #    return None
+    if access_token:
+        context["login"] = True
+    return templates.TemplateResponse(request, "./home.html", context=context)
 
 @app.get("/projects", response_model=None)
 async def get_projects(
