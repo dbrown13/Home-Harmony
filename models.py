@@ -1,25 +1,25 @@
 from pydantic import BaseModel
 from typing import List
 
-class UserProject(BaseModel):
-    project_title: str
-    project_desc: str
+class UserRoom(BaseModel):
+    room_name: str
+    room_desc: str
 
-class UserProjectId(UserProject):
+class UserRoomId(UserRoom):
     user_id: int
 
-class Project(UserProjectId):
-    project_id: int
+class Room(UserRoomId):
+    room_id: int
 
-class Projects(BaseModel):
-    projects: List[Project]
+class Rooms(BaseModel):
+    rooms: List[Room]
 
 class Image(BaseModel):
-    image_title: str
+    image_name: str
     image_desc: str
     image_filename: str
     image_type: str
-    project_id: int
+    room_id: int
 
 class UserImage(Image):
     user_id: int
@@ -29,11 +29,11 @@ class ImageId(UserImage):
 
 class ImageRetrieve(BaseModel):
     image_id: int
-    image_title: str
+    image_name: str
     image_desc: str
     image_data: bytes
     image_type: str
-    project_id: int
+    room_id: int
     user_id: int
 
 class Images(BaseModel):

@@ -13,18 +13,18 @@
 
     function uploadFile(file) {
         const access_token = '{{ access_token }}'; // replace with your access token
-        const proj_id = '{{ proj_id }}';
+        const room_id = '{{ room_id }}';
         var file = document.getElementById('fileInput').files[0];
-        var image_title = document.getElementById('image_title').value;
+        var image_name = document.getElementById('image_name').value;
         var image_desc = document.getElementById('imageDescription').value;
         if (file) {
             var formData = new FormData();
             formData.append('file', file);
-            formData.append('image_title', image_title);
+            formData.append('image_name', image_name);
             formData.append('image_desc', image_desc);
-            formData.append('proj_id', proj_id);
+            formData.append('room_id', room_id);
             formData.append('access_token', access_token);
-            fetch('/upload/{{ proj_id }}', {
+            fetch('/upload/{{ room_id }}', {
                     method: 'POST',
                     body: formData,
                 })
@@ -45,7 +45,7 @@
 <h1 class="title">Add Image</h1>
 <form>
     <label class="label">Image Title:</label>
-    <input class="input" type="text" id="image_title" name="image_title" placeholder="Enter image title ..."><br>
+    <input class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ..."><br>
     <label class="label">Image Description</label>
     <textarea class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea><br>
     <input class="button" type="file" id="fileInput" onchange="previewFile()"><br>
