@@ -16,7 +16,7 @@
         <a class="navbar-item" href="contact.html">Contact</a>
       </div> -->
       <ul>
-        <li><a href="./index.html">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="rooms.html">Rooms</a></li>
         <li><a href="photos.html">Photos</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -62,15 +62,16 @@
       <a href="/login" class="button is-primary">Login</a>
       <a href="/signup" class="button is-light">Sign up</a>
     {% else %}
-      <div class="list-of-projects">
-        <h4>Your Current Projects:</h4>
-        <ul>
-          <!-- Where we will post current projects -->
-          <li>Project 1</li>
-          <li>Project 2</li>
-          <li>Project 3</li>
-        </ul>
-      </div>
+      {% if projects|length > 0 %}
+        <div class="list-of-projects">
+          <h4>Your Current Projects:</h4>
+            <ul>
+            {% for project in projects %}
+              <li>{{ project.project_title }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+      {% endif %}
     {% endif %}
   </body>
 </html>
