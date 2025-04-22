@@ -1,11 +1,8 @@
-<script type="text/javascript">
-
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width="device-width", initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - Edit Room</title>
     <link
         rel="stylesheet"
@@ -13,50 +10,100 @@
     >
 </head>
 <body>
-    <h1 class="title">Edit Room</h1>
-    <h2 class="subtitle">Room Details</h2>
-    <p>Room ID: {{ room.room_id }}</p>
-    <form action="/edit_room/{{ room.room_id }}" method="post">
-        <div class="columns">
-            <div class="column">
+    <br>
+    <div class="columns">
+        <div class="column is-four-fifths is-offset-one-fifth">
+            <figure class="image is-128x128">
+                <img class="is-rounded" src="/static/images/HomeHarmonyLogo.jpg"/>
+            </figure>
+            <br>
+            <h1 class="title">Edit Your Room</h1>
+            <p>Room ID: {{ room.room_id }}</p>
+            <p>Room Name: {{ room.room_name }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
-                    <label for="room_name" class="label">Room Name</label>
-                    <input class="input" name="room_name" value="{{ room.room_name }}">
+                    <label class="label" for="room_name">Room Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="room_name" value="{{ room.room_name }}" placeholder="Enter name of room ...">
+                    </div>
                 </div>
-            </div>
-            <div class="column">
                 <div class="field">
-                    <label for="room_desc" class="label">Room Description</label>
-                    <textarea class="textarea" name="room_desc">{{ room.room_desc }}</textarea>
+                    <label class="label" for="room_desc">Room Theme / Description</label>
+                    <div class="control">
+                        <textarea class="textarea" rows="3" cols="50" name="room_desc" placeholder="Enter description of room ...">{{ room.room_desc }}</textarea>
+                    </div>
                 </div>
-            </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="room_num_walls">Number of Walls to Decorate</label>
+                        <div class="control">
+                            <input class="input" type="number" value="{{ room.room_num_walls }}" name="room_num_walls" placeholder="Enter number of walls to decorate..." min="1" max="4" size="20">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color1">Main Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" value="{{ room.room_wall_color1 }}" name="room_wall_color1" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color2">Accent Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" value="{{ room.room_wall_color2 }}" name="room_wall_color2" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_ceiling_color">Ceiling Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" value="{{ room.room_ceiling_color }}" name="room_ceiling_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_floor_color">Floor Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" value="{{ room.room_floor_color }}" name="room_floor_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_trim_color">Trim Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" value="{{ room.room_trim_color }}" name="room_trim_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="room_other_details">Other Details</label>
+                        <div class="control">
+                            <textarea class="textarea" rows="3" cols="50" name="room_other_details" placeholder="Enter any additional details...">{{ room.room_other_details }}</textarea>
+                        </div>
+                    </div>
+                </div> 
+                <br>
+                <input class="button is-primary" type="submit">
+                <a href="/room_images/{{ room.room_id }}" class="button is-success">Images</a>
+                <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()">
+            </form>
         </div>
-        <div class="field">
-            <button type="submit" class="button is-success">Save Changes</button>
-            <a href="/upload/{{ room.room_id }}" class="button is-primary">Upload Image</a>
-            <a href="/rooms" class="button is-light" onclick="window.history.back()">Cancel</a>
-        </div>
-    </form>
-
-
-    {% for image in images.images %}
-        <p>{{ image.image_id }}</p>
-        <p>{{ image.image_title }}</p>
-        <p>{{ image.image_desc }}</p>
-        <div class="card">
-            <div class="card-image">
-                <figure id="content">
-                    <img 
-                        src="data:image/{{ image.image_type}};base64,{{ image.image_data }}"
-                        alt="Room Image"
-                        style="max-width: auto; height: 50%;"
-                    />
-                </figure>
-            </div>
-            <footer class="card-footer">
-                <a href="/delete_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a>
-            </footer>
-        </div>
-    {% endfor %}
+    </div>
+    <br>
 </body>
 </html>

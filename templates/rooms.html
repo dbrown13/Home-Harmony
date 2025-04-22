@@ -32,11 +32,17 @@
           <div class="card-container">
             <h4>Room: {{ room.room_name }}</h4>
             <p>Description: {{ room.room_desc }}</p>
+
+            <a href="/edit_room/{{ room.room_id }}" class="card-footer-item">Edit</a>
+            <a href="/delete_room/{{ room.room_id }}" class="card-footer-item">Delete</a>
           </div>
-        </div>
+          
         {% endfor %}
       {% endif %}
       <br></br>
+      <form action="/add_room" method="get">
+        <button class="open-button" type="submit">Design a Room</button>
+      </form>
       <button class="open-button" onClick="roomForm()">Design a Room</button>
 
       <div class="room-form"  id="myRoomForm">
@@ -44,7 +50,7 @@
           <h2>Design a Room</h2>
           <label for="room"><b>Room Name</b></label>
           <input type="text" placeholder="Name the room" name="room" required>
-
+          
           <label for="Design plan"><b>Room Theme:</b></label>
           <input type="text" placeholder="Enter your idea" name="design-plan" required>
           

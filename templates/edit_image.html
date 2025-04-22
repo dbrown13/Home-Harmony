@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+        >
+        <h1 class="title">Edit Image Information</h1>
+        <p>Room ID: {{ room.room_id }}</p>
+        <p>Image ID: {{ image.image_id }}</p>
+        <form action="/edit_image/{{ room.room_id }}/{{ image.image_id }}" method="post" enctype="multipart/form-data">
+            <label class="label">Image Title:</label>
+            <input class="input" type="text" id="image_name" name="image_name" value="{{ image.image_name }}">
+            <br>
+            <label class="label">Image Description</label>
+            <textarea class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50">{{ image.image_desc }}</textarea>
+            <br>
+            <img id="preview" src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" width="200">
+            <br>
+            <input class="button is-success" type="submit" value="Save Changes">
+            <a class="button is-danger" href="/delete_image/{{ room.room_id }}/{{ image.image_id }}">Delete Image</a>
+            <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
+        </form>
+        <p id="serverMsg"></p>
+        <img height="200">
+    </body>
+</html>
