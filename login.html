@@ -6,7 +6,7 @@
     <title>Home Harmony - Log in</title>
     <link
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+        href="style.css"
     >
 </head>
 <body>
@@ -14,22 +14,23 @@
     <div class="columns">
         <div class="column is-four-fifths is-offset-one-fifth">
             <figure class="image is-128x128">
-                <img class="is-rounded" src="images/HomeHarmonyLogo.jpg" />
+                <img class="logo" src="images/HomeHarmonyLogo.jpg" />
             </figure>
             <br>
-            <h1 class="title">Log in to Home Harmony!</h1>
+            <h1 class="title">Please Log in!</h1>
         </div>
     </div> 
     <hr>
-    <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
-            <form action="/login" method="post">
-                <div class="field">
+    <div class="login-form">
+        <div class="login-field">
+            <form action="/index.html" method="post">
+                <div class="login">
                     <label class="label" for="username">Username</label>
                     <div class="control">
                         <input class="input" type="text" name="username" placeholder="Enter username ...">
                     </div>
                 </div>
+                <br></br>
                 <div class="field">
                     <label class="label" for="password">Password</label>
                     <div class="control">
@@ -37,7 +38,7 @@
                     </div>
                 </div>
                 <br>
-                <input class="button is-primary" type="submit">
+                <input class="button" type="submit">
             </form>
             {% if incorrect_username %}
                 <div>
