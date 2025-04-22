@@ -36,42 +36,65 @@
                         <textarea class="textarea" rows="3" cols="50" name="room_desc" placeholder="Enter description of room ..."></textarea>
                     </div>
                 </div>
-                <div class="field">
-                    <label class="label" for="wall_count">Number of Walls to Decorate</label>
-                    <div class="control">
-                        <input class="input" type="number" name="wall_count" placeholder="Enter number of walls to decorate..." min="1" max="4">
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="room_num_walls">Number of Walls to Decorate</label>
+                        <div class="control">
+                            <input class="input" type="number" value="4" name="room_num_walls" placeholder="Enter number of walls to decorate..." min="1" max="4" size="20">
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="wall_color">Wall Color</label>
-                    <div class="control">
-                        <input class="input" type="color" name="wall_color" value="#FFFFFF">
+                    <hr>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color1">Main Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_wall_color1" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color2">Accent Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_wall_color2" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="ceiling_color">Ceiling Color</label>
-                    <div class="control">
-                        <input class="input" type="color" name="ceiling_color" value="#FFFFFF">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_ceiling_color">Ceiling Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_ceiling_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_floor_color">Floor Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_floor_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_trim_color">Trim Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_trim_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="trim_color">Trim Color</label>
-                    <div class="control">
-                        <input class="input" type="color" name="trim_color" value="#FFFFFF">
+                    <div class="field">
+                        <label class="label" for="room_other_details">Other Details</label>
+                        <div class="control">
+                            <textarea class="textarea" rows="3" cols="50" name="room_other_details" placeholder="Enter any additional details..."></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="floor_color">Floor Color</label>
-                    <div class="control">
-                        <input class="input" type="color" name="floor_color" value="#FFFFFF">
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label" for="other_details">Other Details</label>
-                    <div class="control">
-                        <textarea class="textarea" rows="3" cols="50" name="other_details" placeholder="Enter any additional details..."></textarea>
-                    </div>
-                </div>
+                </div> 
                 <br>
                 <input class="button is-primary" type="submit">
             </form>

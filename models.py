@@ -4,6 +4,13 @@ from typing import List
 class UserRoom(BaseModel):
     room_name: str
     room_desc: str
+    room_num_walls: int
+    room_wall_color1: str
+    room_wall_color2: str
+    room_ceiling_color: str
+    room_floor_color: str
+    room_trim_color: str
+    room_other_details: str
 
 class UserRoomId(UserRoom):
     user_id: int
@@ -27,10 +34,12 @@ class UserImage(Image):
 class ImageId(UserImage):
     image_id: int
 
-class ImageRetrieve(BaseModel):
+class ImageUpdate(BaseModel):
     image_id: int
     image_name: str
     image_desc: str
+
+class ImageRetrieve(ImageUpdate):
     image_data: bytes
     image_type: str
     room_id: int

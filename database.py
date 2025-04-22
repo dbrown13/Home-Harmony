@@ -2,7 +2,7 @@ import sqlite3
 from sqlite3 import Connection
 from typing import List, Union
 from pydantic import ValidationError
-from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, Images
+from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images
 import os
 
 def create_user(connection: Connection,
@@ -58,9 +58,9 @@ def create_new_room(connection: Connection,
         cur = connection.cursor()
         cur.execute(
             """
-            INSERT INTO rooms (room_name, room_desc, user_id)
+            INSERT INTO rooms (room_name, room_desc, room_num_walls, room_wall_color1, room_wall_color2, room_ceiling_color, room_floor_color, room_trim_color, room_other_details, user_id)
             VALUES
-            ( :room_name, :room_desc, :user_id)
+            ( :room_name, :room_desc, :room_num_walls, :room_wall_color1, :room_wall_color2, :room_ceiling_color, :room_floor_color, :room_trim_color, :room_other_details, :user_id)
             """,
             room.model_dump()
         )
@@ -71,7 +71,7 @@ def get_rooms(connection: Connection)->Rooms:
         cur = connection.cursor()
         cur.execute(
             """
-            SELECT room_name, room_desc, user_id, room_id
+            SELECT *
             FROM rooms;
             """
         )
@@ -83,7 +83,7 @@ def get_user_rooms(connection: Connection, user_id: int)->Rooms:
         cur = connection.cursor()
         cur.execute(
             """
-            SELECT room_id, room_name, room_desc, user_id
+            SELECT room_id, room_name, room_desc, room_num_walls, room_wall_color1, room_wall_color2, room_ceiling_color, room_floor_color, room_trim_color, room_other_details, user_id
             FROM rooms
             WHERE user_id = ?
             """,
@@ -97,7 +97,7 @@ def get_room_by_id(connection: Connection, room_id: int)->Room:
         cur = connection.cursor()
         cur.execute(
             """
-            SELECT room_name, room_desc, user_id, room_id
+            SELECT room_name, room_desc, room_num_walls, room_wall_color1, room_wall_color2, room_ceiling_color, room_floor_color, room_trim_color, room_other_details, user_id, room_id
             FROM rooms
             WHERE room_id = ?
             LIMIT 1
@@ -167,6 +167,36 @@ def get_images_by_room_id(connection: Connection, room_id: int)->Images:
         )
         return Images(images = [UserImage.model_validate(dict(image)) for image in cur])
 
+def get_image_by_id(connection: Connection, image_id: int)->ImageRetrieve:
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            SELECT image_id, image_name, image_desc, image_data, user_id, room_id
+            FROM images
+            WHERE image_id =?
+            """,
+            (image_id,),
+        )
+        return ImageRetrieve.model_validate(dict(cur.fetchone()))
+    
+
+def update_image_by_id(
+        connection: Connection,
+        image: ImageUpdate)->bool:
+    with connection:
+        cur = connection.cursor()
+        cur.execute(
+            """
+            UPDATE images
+            SET image_name =?, image_desc =?
+            WHERE image_id =?
+            """,
+            (image.image_name, image.image_desc, image.image_id)
+        )
+        connection.commit()
+        return True
+    
 def convertToBinaryData(filename):
     # Convert digital data to binary format
     print("Convert to binary format")
@@ -198,7 +228,7 @@ def writeTofile(data, filename):
         file.write(data)
         print("Stored blob data into ", filename, "\n")
 
-def readBlobData_by_id(connection: Connection, room_id : int)->None:
+def readBlobData_by_room_id(connection: Connection, room_id : int)->None:
     print("Fetching BLOB data from room_id: ", room_id)
     with connection:
         cur = connection.cursor()
@@ -226,7 +256,37 @@ def readBlobData_by_id(connection: Connection, room_id : int)->None:
             image_list.append(ImageRetrieve.model_validate(image))
         images = dict(images=image_list)   
         return images
-    
+
+def readBlobData_by_id(connection: Connection, image_id : int)->None:
+    print("Fetching BLOB data by image id: ", image_id)
+    with connection:
+        cur = connection.cursor()
+
+        sql_fetch_blob_query = """SELECT * 
+        FROM images WHERE image_id =? LIMIT 1"""
+        cur.execute(sql_fetch_blob_query, (image_id,))
+        image_list = []
+        row = cur.fetchone()
+
+        image_id = row[0]
+        print("Image ID: ", image_id)
+        image_name = row[1]
+        print("Image Name: ", image_name)
+        image_desc = row[2]
+        print("Image Desc: ", image_desc)
+        image_data = row[3]
+        image_type = row[4]
+        user_id = row[5]
+        room_id = row[6]
+        image = {"image_id": image_id,
+                    "image_name": image_name,
+                    "image_desc": image_desc,
+                    "image_data": image_data,
+                    "image_type": image_type,
+                    "room_id": room_id,
+                    "user_id": user_id} 
+        return ImageRetrieve.model_validate(image)
+        
 def delete_image_by_id(connection: Connection, room_id: int, image_id: int)->bool:
     print("Deleting image_id: ", image_id, " from room_id: ", room_id)
     with connection:
@@ -240,7 +300,7 @@ def delete_image_by_id(connection: Connection, room_id: int, image_id: int)->boo
         )
         connection.commit()
 
-        images = readBlobData_by_id(connection=connection, room_id=room_id)
+        images = readBlobData_by_room_id(connection=connection, room_id=room_id)
         return images
     
 if __name__ == "__main__":

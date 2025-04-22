@@ -24,7 +24,7 @@
             formData.append('image_desc', image_desc);
             formData.append('room_id', room_id);
             formData.append('access_token', access_token);
-            fetch('/upload/{{ room_id }}', {
+            fetch('/upload_image/{{ room_id }}', {
                     method: 'POST',
                     body: formData,
                 })
@@ -51,6 +51,7 @@
     <input class="button" type="file" id="fileInput" onchange="previewFile()"><br>
     <br>
     <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
+    <a class="button is-danger" href="/room_images/{{ room_id }}">Return</a>
     <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
 </form>
 <p id="serverMsg"></p>
