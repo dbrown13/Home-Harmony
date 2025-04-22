@@ -1,0 +1,30 @@
+<!-- templates/confirm_delete.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Confirm Delete</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+
+    <div class="modal is-active" id="modal">
+        <div class="modal-background">
+            <div class="modal-content">
+                <div class="box">
+                    <h2 class="subtitle">Confirm Delete</h2>
+                    <p>Are you sure you want to delete room {{ room_name }}?</p>
+                    <form hx-delete="/delete_room/{{ room_id }}" hx-target="#content">
+                        <button class="button" type="submit">Yes, Delete</button>
+                    </form>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body> 
+</html> 

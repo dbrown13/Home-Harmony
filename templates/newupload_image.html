@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+</head>
+<body>
+    <p>Room ID: {{ room_id }}</p>
+    <p>User ID: {{ user_id }}</p>
+    <p>Login: {{ login }}</p>
+    <form action="/upload_image/{{ room_id }}" method="post" enctype="multipart/form-data">
+        <div class="field">
+            <label class="label" for="image_name">Image Name</label>
+            <div class="control">
+                <input class="input" type="text" name="image_name" placeholder="Enter name of image ...">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="image_desc">Image Description</label>
+            <div class="control">
+                <textarea class="textarea" rows="3" cols="50" name="image_desc" placeholder="Enter description of image ..."></textarea>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="image_file">Upload Image</label>
+            <div class="control">
+                <input type="file" name="image_file" accept=".jpg, .jpeg, .png, .gif">
+            </div>
+        </div>
+        <div class="hidden">
+            <input type="text" name="room_id" value="{{ room_id }}">
+            <input type="text" name="user_id" value="{{ user_id }}">
+        </div>
+        <button type="submit" class="button is-primary">Upload Image</button>
+    </form>
+</body>
+</html>

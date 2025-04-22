@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width="device-width", initial-scale=1.0">
+    <title>Home Harmony - Delete Room</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <h1 class="title">Delete Room</h1>
+        {% for room in rooms %}
+        <div class="card">
+            <div class="card-header">
+                <header class="card-header"></header>
+                    <p class="card-header-title">Room Name: {{ room.room_name }}</p>
+            </div>
+            <div class="card-content">
+                <div class="card-image">
+                    <figure class="image is-5by4">
+                        <img 
+                            src="https://bulma.io/assets/images/placeholders/600x480.png"
+                            alt="Placeholder image"
+                        />
+                    </figure>
+                </div>
+                <p>Description: {{ room.room_desc }}</p>
+                <p>Room ID: {{ room.room_id }}</p>
+                <p>User ID: {{ room.user_id }}</p>
+            </div>
+            <footer class="card-footer">
+                <a href="/edit_room/{{ room.room_id }}" class="card-footer-item">Edit</a>
+                <a href="/delete_room/{{ room.room_id }}" class="card-footer-item">Delete</a>
+            </footer>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

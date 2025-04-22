@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Add Room</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column is-four-fifths is-offset-one-fifth">
+            <figure class="image is-128x128">
+                <img class="is-rounded" src="/static/images/HomeHarmonyLogo.jpg"/>
+            </figure>
+            <br>
+            <h1 class="title">Decorate a Room</h1>
+        </div>
+    </div>
+    <hr>
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            <form action="/add_room" method="post">
+                <div class="field">
+                    <label class="label" for="room_name">Room Name</label>
+                    <div class="control">
+                        <input class="input" type="text" name="room_name" placeholder="Enter name of room ...">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="room_desc">Room Theme / Description</label>
+                    <div class="control">
+                        <textarea class="textarea" rows="3" cols="50" name="room_desc" placeholder="Enter description of room ..."></textarea>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label" for="room_num_walls">Number of Walls to Decorate</label>
+                        <div class="control">
+                            <input class="input" type="number" value="4" name="room_num_walls" placeholder="Enter number of walls to decorate..." min="1" max="4" size="20">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color1">Main Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_wall_color1" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_wall_color2">Accent Wall Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_wall_color2" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_ceiling_color">Ceiling Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_ceiling_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_floor_color">Floor Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_floor_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="room_trim_color">Trim Color</label>
+                                <div class="control">
+                                    <input class="input" type="color" name="room_trim_color" value="#FFFFFF">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="room_other_details">Other Details</label>
+                        <div class="control">
+                            <textarea class="textarea" rows="3" cols="50" name="room_other_details" placeholder="Enter any additional details..."></textarea>
+                        </div>
+                    </div>
+                </div> 
+                <br>
+                <input class="button is-primary" type="submit">
+            </form>
+        </div>
+    </div>
+    <br>
+</body>
+</html>

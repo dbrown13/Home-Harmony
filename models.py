@@ -1,25 +1,32 @@
 from pydantic import BaseModel
 from typing import List
 
-class UserProject(BaseModel):
-    project_title: str
-    project_desc: str
+class UserRoom(BaseModel):
+    room_name: str
+    room_desc: str
+    room_num_walls: int
+    room_wall_color1: str
+    room_wall_color2: str
+    room_ceiling_color: str
+    room_floor_color: str
+    room_trim_color: str
+    room_other_details: str
 
-class UserProjectId(UserProject):
+class UserRoomId(UserRoom):
     user_id: int
 
-class Project(UserProjectId):
-    project_id: int
+class Room(UserRoomId):
+    room_id: int
 
-class Projects(BaseModel):
-    projects: List[Project]
+class Rooms(BaseModel):
+    rooms: List[Room]
 
 class Image(BaseModel):
-    image_title: str
+    image_name: str
     image_desc: str
     image_filename: str
     image_type: str
-    project_id: int
+    room_id: int
 
 class UserImage(Image):
     user_id: int
@@ -27,13 +34,15 @@ class UserImage(Image):
 class ImageId(UserImage):
     image_id: int
 
-class ImageRetrieve(BaseModel):
+class ImageUpdate(BaseModel):
     image_id: int
-    image_title: str
+    image_name: str
     image_desc: str
+
+class ImageRetrieve(ImageUpdate):
     image_data: bytes
     image_type: str
-    project_id: int
+    room_id: int
     user_id: int
 
 class Images(BaseModel):

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Room Images</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column is-four-fifths is-offset-one-fifth">
+            <figure class="image is-128x128">
+                <img class="is-rounded" src="/static/images/HomeHarmonyLogo.jpg"/>
+            </figure>
+            <br>
+            <h1 class="title">Edit Your {{ room.room_name }} Images</h1>
+            <p>Room ID: {{ room.room_id }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
+            {% if images["images"] %}
+                {% for image in images.images %}
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-4">{{ image.image_name }}</p>
+                            <p class="subtitle is-6">{{ image.image_desc }}</p>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="/edit_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Edit Image</a>
+                            <a href="/delete_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a>
+                        </footer>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% else %}
+                <p><em>&nbsp&nbsp&nbsp&nbspNo images available for this room.</em></p>
+            {% endif %}
+            <hr>
+            <h2>Upload a new image for this room:</h2>
+            <br>
+            <form action="/upload_image_form/{{ room.room_id }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="room_id" value="{{ room.room_id }}">
+                <input type="hidden" name="room_name" value="{{ room.room_name }}">
+                <input type="hidden" name="room_desc" value="{{ room.room_desc }}">
+                <button class="button is-primary" type="submit">Upload Image</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
