@@ -40,19 +40,26 @@
 </script>
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+  href="/style.css"
 >
 <h1 class="title">Add Image</h1>
-<form>
-    <label class="label">Image Title:</label>
-    <input class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ..."><br>
-    <label class="label">Image Description</label>
-    <textarea class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea><br>
-    <input class="button" type="file" id="fileInput" onchange="previewFile()"><br>
-    <br>
-    <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
-    <a class="button is-danger" href="/room_images/{{ room_id }}">Return</a>
-    <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
-</form>
+<div class="login-form">
+    <div class="login-field">
+        <form class="add-form">
+            <label class="label">Image Title:</label>
+            <input style="width: 100%;" class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ...">
+            <br></br>
+            <label class="label">Image Description:</label>
+            <textarea style="width: 100%;" class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea>
+            <br></br>
+            <input class="button" type="file" id="fileInput" onchange="previewFile()">
+            <br></br>
+            <br></br>
+            <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
+            <button class="button"><a style="text-decoration: none;" class="button is-danger" href="/room_images/{{ room_id }}">Return</a></button>
+            <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
+        </form>
+    </div>
+</div>
 <p id="serverMsg"></p>
 <img height="200">
