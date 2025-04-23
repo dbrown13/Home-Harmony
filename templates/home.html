@@ -6,33 +6,12 @@
     <link rel="stylesheet" href="/static/style.css">
   </head>
   <body>
+    <figure>
+        <img class="logo" width="150" src="./static/images/HomeHarmonyLogo.jpg" />
+    </figure>
+    <br>
     <h1 class="app-title">Home Harmony</h1>
-    <div class="dropdown">
-      <button class="dropbtn">Dropdown</button>
-      <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-        <a href="#">Link 4</a>
-      </div>
-    </div>
-    <nav class="navbar">
-    <!-- <nav class="navbar-divider is-fixed-top">
-      <div class="navbar-start">
-        <a class="navbar-item" href="index.html">Home</a>
-        <a class="navbar-item" href="rooms.html">Rooms</a>
-        <a class="navbar-item" href="photos.html">Photos</a>
-        <a class="navbar-item" href="contact.html">Contact</a>
-      </div> -->
-      <ul>
-        <li><a href="/home">Home</a></li>
-        <li><a href="/rooms">Rooms</a></li>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li style="float:right"><a href="./login.html">Login</a></li>
-      </ul>
-    </nav>
-
+    {% include "./navbar.html" %}
     <main>
       <script src="./index.js"></script>
       <br></br>
@@ -62,25 +41,11 @@
         </div>
       </div>
 
-       <br></br>
-       <br></br>
+      <br></br>
+      <hr></hr>
+      <br></br>
 
       <h3>Where all of your decoration and design ideas are brought to life!</h3>
     </main>
-    {% if not login %}
-      <a href="/login" class="button is-primary">Login</a>
-      <a href="/signup" class="button is-light">Sign up</a>
-    {% else %}
-      {% if rooms|length > 0 %}
-        <div class="list-of-rooms">
-          <h4>Your Current Rooms:</h4>
-            <ul>
-            {% for room in rooms %}
-              <li>{{ room.room_name }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-      {% endif %}
-    {% endif %}
   </body>
 </html>

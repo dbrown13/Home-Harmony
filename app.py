@@ -20,6 +20,7 @@ import jwt as jwt
 from pathlib import Path
 import os
 
+
 # Initialize FastAPI
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -120,8 +121,14 @@ async def login_user(request: Request, username : Annotated[str, Form()], passwo
             "user_id": user.user_id
         }, 
         SECRET_KEY, algorithm=ALGORITHM)
-        
-    response = RedirectResponse("/home", status_code=status.HTTP_303_SEE_OTHER)
+    
+    if user is not None:
+        print(f"User {user.username} logged in")
+        os.environ['LOGIN_STATUS'] = 'True'
+        context = {"login": True}
+
+    response = templates.TemplateResponse(request, "./home.html", context=context)    
+    #response = RedirectResponse("/home", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie("access_token", 
                         f"Bearer {token}",
                         samesite='lax',
@@ -138,6 +145,7 @@ async def logout(
     access_token: Annotated[str | None, Cookie()] = None):
     response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie("access_token")
+    os.environ['LOGIN_STATUS'] = 'False'
     return response
 
 @app.delete("/delete_acct")
