@@ -12,7 +12,7 @@ from typing import Annotated
 from sqlite3 import Connection, Row
 from database import get_user_rooms, get_room_by_id, create_user, get_user, delete_user, delete_room_by_id
 from database import create_new_room, insertBLOB, readBlobData_by_room_id, readBlobData_by_id, update_room_by_id, delete_image_by_id
-from database import update_image_by_id
+from database import update_image_by_id, readBlobData_by_user_id, delete_uploaded_images
 from models import UserRoomId, UserHashed, UserID, UserImage, Room, ImageUpdate
 from secrets import token_hex
 from passlib.hash import pbkdf2_sha256
@@ -146,6 +146,7 @@ async def logout(
     response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie("access_token")
     os.environ['LOGIN_STATUS'] = 'False'
+    delete_uploaded_images()
     return response
 
 @app.delete("/delete_acct")
@@ -185,11 +186,12 @@ async def get_rooms(
     assert isinstance(user_id, int) or user_id is None, "Invalid access token"
     print(f"user_id: {user_id} is requesting rooms")
     context = get_user_rooms(connection, user_id).model_dump()
-    print(context)
+
     #if len(context["rooms"]) == 0:
     #    return None
     if access_token:
         context["login"] = True
+    print(f"context: {context}")
     return templates.TemplateResponse(request, "./rooms.html", context=context)
 
 
@@ -294,6 +296,18 @@ async def delete_room(request: Request, room_id: int)->HTMLResponse:
 
     delete_room_by_id(connection, room_id)
     return RedirectResponse("/rooms", status_code=status.HTTP_303_SEE_OTHER)
+
+@app.get("/all_images")
+async def all_images(
+    request: Request,
+    user_id : int  = Depends(oauth_cookie))->HTMLResponse:
+    print(f"User is requesting all images")
+    images = readBlobData_by_user_id(connection, user_id)
+    # Convert binary data to base64 for display in HTML
+    for item in images["images"]:
+        item.image_data = base64.b64encode(item.image_data).decode('utf-8')
+    context = {"images": images, "login": True}
+    return templates.TemplateResponse(request, "./all_images.html", context=context)
 
 @app.post("/upload_image_form/{room_id}")
 async def upload_image_form(
@@ -438,3 +452,15 @@ async def delete_image(request: Request, image_id: int)->HTMLResponse:
     print("Image deleted") 
     context = {"room": room, "images": images, "login": True}
     return templates.TemplateResponse(request, "./room_images.html", context=context)
+
+@app.get("/contact")
+async def contact(request: Request)->HTMLResponse:
+    context = {}
+    user_id = None
+    access_token = request.cookies.get("access_token")
+    if access_token:
+        user_id = decrypt_access_token(access_token)
+        if user_id:
+            user_id = user_id["user_id"]
+    context["user_id"] = user_id
+    return templates.TemplateResponse(request, "./contact.html", context=context)

@@ -4,6 +4,7 @@ from typing import List, Union
 from pydantic import ValidationError
 from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images
 import os
+import shutil
 
 def create_user(connection: Connection,
                 user: UserHashed)->bool:
@@ -287,6 +288,35 @@ def readBlobData_by_id(connection: Connection, image_id : int)->None:
                     "user_id": user_id} 
         return ImageRetrieve.model_validate(image)
         
+def readBlobData_by_user_id(connection: Connection, userid : int)->None:
+    print("Fetching BLOB data by user id: ", userid)
+    with connection:
+        cur = connection.cursor()
+
+        sql_fetch_blob_query = """SELECT * 
+        FROM images WHERE user_id =?"""
+        cur.execute(sql_fetch_blob_query, (userid,))
+        image_list = []
+        rows = cur.fetchall()
+        for row in rows:
+            image_id = row[0]
+            image_name = row[1]
+            image_desc = row[2]
+            image_data = row[3]
+            image_type = row[4]
+            user_id = row[5]
+            room_id = row[6]
+            image = {"image_id": image_id,
+                     "image_name": image_name,
+                     "image_desc": image_desc,
+                     "image_data": image_data,
+                     "image_type": image_type,
+                     "room_id": room_id,
+                     "user_id": user_id}
+            image_list.append(ImageRetrieve.model_validate(image))
+        images = dict(images=image_list)   
+        return images
+        
 def delete_image_by_id(connection: Connection, room_id: int, image_id: int)->bool:
     print("Deleting image_id: ", image_id, " from room_id: ", room_id)
     with connection:
@@ -303,21 +333,25 @@ def delete_image_by_id(connection: Connection, room_id: int, image_id: int)->boo
         images = readBlobData_by_room_id(connection=connection, room_id=room_id)
         return images
     
+def delete_uploaded_images() -> None:
+    dir_path = "c:/Users/diver/Development/Home-Harmony-Deryn-Apr22/Home-Harmony/static/uploads"
+    for filename in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Failed to delete {file_path}. Reason: {e}")
+    
 if __name__ == "__main__":
     connection = sqlite3.connect('harmony.db')
     connection.row_factory = sqlite3.Row
+    
+    current_directory = os.getcwd()
+    print(f"current directory: {current_directory}")
+    #dir_path = os.path.join(current_directory, "/Home-Harmony/static/uploads")
+    #dir_path = "c:/Users/diver/Development/Home-Harmony-Deryn-Apr22/Home-Harmony/static/uploads"
 
-    #insert_room(connection=connection, room=test_room)
-    #rooms = get_rooms(connection=connection)
-    #print(get_rooms(connection=connection))
-    #for room in get_rooms(connection=connection):
-    #    print(room)
-    #rooms = get_user_rooms(connection=connection, user_id=4)
-    #for room in rooms:
-    #    print(dict(room))
-    #room = get_room_by_id(connection=connection, room_id=2)
-    #print(room.model_dump())
-    #user = get_user(connection, 'dibrown2')
-    #print(user)
-    #decor = Decor(decor_name='test decor', decor_type='wall', decor_desc='test decor description', user_id=1, room_id=1)
-    #print(add_decor(connection=connection, decor=decor))
+    delete_uploaded_images()

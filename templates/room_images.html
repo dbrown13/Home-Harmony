@@ -4,31 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - Room Images</title>
-    <link
-        rel="stylesheet"
-        href="/style.css"
-    >
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <h1 class="app-title">Home Harmony</h1>
-    <nav class="navbar">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="rooms.html">Rooms</a></li>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li style="float:right"><a href="./login.html">Login</a></li>
-      </ul>
-    </nav>
     <br>
     <div class="columns">
-        <div class="column is-four-fifths is-offset-one-fifth">
-            <figure class="image is-128x128">
-                <img class="logo" src="/static/images/HomeHarmonyLogo.jpg"/>
+        <div class="column">
+            <figure>
+                <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg"/>
             </figure>
+            <h1 class="title">Decorate a Room</h1>
+            {% include "./navbar.html" %}
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column is-four-fifths is-offset-one-fifth">
+
             <br>
-            <h2 class="title">Edit Your {{ room.room_name }} Images</h2>
-            <p>Room ID: {{ room.room_id }}</p>
+            <h2 class="title">Your {{ room.room_name }} Images</h2>
+
         </div>
     </div>
     <hr>

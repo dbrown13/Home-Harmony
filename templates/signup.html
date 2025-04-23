@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - Sign Up</title>
-    <link
-        rel="stylesheet"
-        href="/style.css" 
-    />
+    <link rel="stylesheet" href="/static/style.css"/>
 </head>
 <body>
     <br>
     <div class="columns">
         <div class="column is-four-fifths is-offset-one-fifth">
-            <figure class="image is-128x128">
-                <img class="logo" src="/images/HomeHarmonyLogo.jpg" />
+            <figure class="logo">
+                <img class="logo" width="120" src="static/images/HomeHarmonyLogo.jpg" />
             </figure>
             <br>
             <h1 class="title">Sign up for Home Harmony!</h1>
@@ -38,6 +35,7 @@
                 </div>
                 <br>
                 <input class="button is-primary" type="submit">
+                <br>
             </form>
             {% if taken %}
                 <div><b>Username {{ username }} is taken.  Pick a new username.</b></div>
