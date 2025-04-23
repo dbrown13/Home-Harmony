@@ -17,8 +17,8 @@
             <div class="modal-content">
                 <div class="box">
                     <h2 class="subtitle">Confirm Delete</h2>
-                    <p>Are you sure you want to delete room {{ room_name }}?</p>
-                    <form hx-delete="/delete_room/{{ room_id }}" hx-target="#content">
+                    <p>Are you sure you want to delete project {{ proj_name }}?</p>
+                    <form hx-delete="/delete_project/{{ proj_id }}" hx-target="#content">
                         <button class="button" type="submit">Yes, Delete</button>
                     </form>
                     <button class="modal-close is-large" aria-label="close"></button>

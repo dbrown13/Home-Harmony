@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Rooms</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <div id="content">
+    <h1 class="title">Manage Rooms</h1>
+        {% if not rooms %}
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-header-title">No rooms found.</p>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="/add_room" class="card-footer-item">Add New Room</a>
+            </footer>
+        {% else %}
+            {% for room in rooms %}
+            <div class="card">
+                <div class="card-header">
+                    <header class="card-header"></header>
+                        <p class="card-header-title">Room Name: {{ room.room_name }}</p>
+                </div>
+                <div class="card-content">
+    <!--                 <div class="card-image">
+                        <figure class="image is-5by4">
+                            <img 
+                                src="https://bulma.io/assets/images/placeholders/600x480.png"
+                                alt="Placeholder image"
+                            />
+                        </figure>
+                    </div> -->
+                    <p>Description: {{ room.room_desc }}</p>
+                    <p>room ID: {{ room.room_id }}</p>
+                    <p>User ID: {{ room.user_id }}</p>
+                </div>
+                <footer class="card-footer">
+                    <a href="/edit_room/{{ room.room_id }}" class="card-footer-item">Edit room</a>
+                    <a href hx-delete="/delete_room/{{ room.room_id }}" class="card-footer-item"
+                    hx-confirm = "Are you sure you want to delete this room?" hx-target="#content" hx-swap="outerHTML"
+                    class="card-footer-item">Delete room</a>
+                </footer>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+</html>
