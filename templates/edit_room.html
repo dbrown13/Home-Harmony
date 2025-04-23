@@ -6,7 +6,7 @@
     <title>Home Harmony - Edit Room</title>
     <link
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+        href="/style.css"
     >
 </head>
 <body>
@@ -14,7 +14,7 @@
     <div class="columns">
         <div class="column is-four-fifths is-offset-one-fifth">
             <figure class="image is-128x128">
-                <img class="is-rounded" src="/static/images/HomeHarmonyLogo.jpg"/>
+                <img class="logo" src="/static/images/HomeHarmonyLogo.jpg"/>
             </figure>
             <br>
             <h1 class="title">Edit Your Room</h1>
@@ -23,8 +23,8 @@
         </div>
     </div>
     <hr>
-    <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+    <div class="row">
+        <div class="column">
             <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
                     <label class="label" for="room_name">Room Name</label>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="columns">
+                    <div class="row">
                         <div class="column">
                             <div class="field">
                                 <label class="label" for="room_wall_color1">Main Wall Color</label>
