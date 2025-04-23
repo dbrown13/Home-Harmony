@@ -6,7 +6,7 @@
     <title>Home Harmony - Edit Room</title>
     <link
         rel="stylesheet"
-        href="/static/style.css"
+        href="/style.css"
     >
 </head>
 <body>
@@ -22,8 +22,8 @@
         </div>
     </div>
     <hr>
-    <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+    <div class="row">
+        <div class="column">
             <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
                     <label class="label" for="room_name">Room Name</label>
