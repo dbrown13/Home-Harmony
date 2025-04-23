@@ -13,13 +13,12 @@
     <br>
     <div class="columns">
         <div class="column is-four-fifths is-offset-one-fifth">
-            <figure class="image is-128x128">
-                <img class="logo" src="/static/images/HomeHarmonyLogo.jpg"/>
+            <figure>
+                <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg" />
             </figure>
             <br>
             <h1 class="title">Edit Your Room</h1>
-            <p>Room ID: {{ room.room_id }}</p>
-            <p>Room Name: {{ room.room_name }}</p>
+            {% include "./navbar.html" %}
         </div>
     </div>
     <hr>
@@ -46,7 +45,15 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="row">
+                    <style>
+                        .three-columns {
+                            column-count: 3;
+                        }
+                        .two-columns {
+                            column-count: 2;
+                        }
+                    </style>
+                    <div class="three-columns">
                         <div class="column">
                             <div class="field">
                                 <label class="label" for="room_wall_color1">Main Wall Color</label>
@@ -64,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="columns">
+                    <div class="three-columns">
                         <div class="column">
                             <div class="field">
                                 <label class="label" for="room_ceiling_color">Ceiling Color</label>

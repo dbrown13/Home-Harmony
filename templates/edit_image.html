@@ -11,8 +11,6 @@
         href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
         >
         <h1 class="title">Edit Image Information</h1>
-        <p>Room ID: {{ room.room_id }}</p>
-        <p>Image ID: {{ image.image_id }}</p>
         <form action="/edit_image/{{ room.room_id }}/{{ image.image_id }}" method="post" enctype="multipart/form-data">
             <label class="label">Image Title:</label>
             <input class="input" type="text" id="image_name" name="image_name" value="{{ image.image_name }}">
