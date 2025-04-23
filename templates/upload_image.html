@@ -38,14 +38,21 @@
         }
     }
 </script>
-<link
-  rel="stylesheet"
-  href="/style.css"
->
-<h1 class="title">Add Image</h1>
+<link rel="stylesheet" href="../static/style.css">
+<br>
+<div class="columns">
+    <div class="column">
+        <figure>
+            <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg"/>
+        </figure>
+        <h1 class="title">Add an Image</h1>
+        {% include "./navbar.html" %}
+    </div>
+</div>
 <div class="login-form">
     <div class="login-field">
         <form class="add-form">
+            <br></br>
             <label class="label">Image Title:</label>
             <input style="width: 100%;" class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ...">
             <br></br>
@@ -58,6 +65,7 @@
             <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
             <button class="button"><a style="text-decoration: none;" class="button is-danger" href="/room_images/{{ room_id }}">Return</a></button>
             <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
+            <br></br>
         </form>
     </div>
 </div>

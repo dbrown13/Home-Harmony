@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="/static/style.css">
   </head>
   <body>
+    <figure>
+      <img class="logo" width="150" src="/static/images/HomeHarmonyLogo.jpg"/>
+    </figure>
+    <br>
     <h1>Home Harmony</h1>
     {% include "./navbar.html" %}
     <main>
@@ -24,10 +28,10 @@
         {% endfor %}
       {% endif %}
       <br></br>
-      <form action="/add_room" method="get">
+       <form action="/add_room" method="get">
         <button class="open-button" type="submit">Design a Room</button>
       </form>
-      <button class="open-button" onClick="roomForm()">Design a Room</button>
+<!--      <button class="open-button" onClick="roomForm()">Design a Room</button>
 
       <div class="room-form"  id="myRoomForm">
         <form action="/action_page.php" class="form-container" method="post">
@@ -72,7 +76,7 @@
 
           <button type="submit" class="btn">Submit</button>
           <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
-        </form>
+        </form> -->
       </div>
     </main>
     <script src="/static/rooms.js"></script>
