@@ -270,11 +270,8 @@ def readBlobData_by_id(connection: Connection, image_id : int)->None:
         row = cur.fetchone()
 
         image_id = row[0]
-        print("Image ID: ", image_id)
         image_name = row[1]
-        print("Image Name: ", image_name)
         image_desc = row[2]
-        print("Image Desc: ", image_desc)
         image_data = row[3]
         image_type = row[4]
         user_id = row[5]
@@ -350,7 +347,6 @@ if __name__ == "__main__":
     connection.row_factory = sqlite3.Row
     
     current_directory = os.getcwd()
-    print(f"current directory: {current_directory}")
     #dir_path = os.path.join(current_directory, "/Home-Harmony/static/uploads")
     #dir_path = "c:/Users/diver/Development/Home-Harmony-Deryn-Apr22/Home-Harmony/static/uploads"
 

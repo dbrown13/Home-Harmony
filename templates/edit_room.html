@@ -6,7 +6,7 @@
     <title>Home Harmony - Edit Room</title>
     <link
         rel="stylesheet"
-        href="/style.css"
+        href="/static/style.css"
     >
 </head>
 <body>
@@ -22,8 +22,8 @@
         </div>
     </div>
     <hr>
-    <div class="row">
-        <div class="column">
+    <div class="columns">
+        <div class="column is-half is-offset-one-quarter">
             <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
                     <label class="label" for="room_name">Room Name</label>
@@ -58,7 +58,7 @@
                             <div class="field">
                                 <label class="label" for="room_wall_color1">Main Wall Color</label>
                                 <div class="control">
-                                    <input class="input" type="color" value="{{ room.room_wall_color1 }}" name="room_wall_color1" value="#FFFFFF">
+                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color1 }}" name="room_wall_color1" value="#FFFFFF">
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                             <div class="field">
                                 <label class="label" for="room_wall_color2">Accent Wall Color</label>
                                 <div class="control">
-                                    <input class="input" type="color" value="{{ room.room_wall_color2 }}" name="room_wall_color2" value="#FFFFFF">
+                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color2 }}" name="room_wall_color2" value="#FFFFFF">
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                             <div class="field">
                                 <label class="label" for="room_ceiling_color">Ceiling Color</label>
                                 <div class="control">
-                                    <input class="input" type="color" value="{{ room.room_ceiling_color }}" name="room_ceiling_color" value="#FFFFFF">
+                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_ceiling_color }}" name="room_ceiling_color" value="#FFFFFF">
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                             <div class="field">
                                 <label class="label" for="room_floor_color">Floor Color</label>
                                 <div class="control">
-                                    <input class="input" type="color" value="{{ room.room_floor_color }}" name="room_floor_color" value="#FFFFFF">
+                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_floor_color }}" name="room_floor_color" value="#FFFFFF">
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             <div class="field">
                                 <label class="label" for="room_trim_color">Trim Color</label>
                                 <div class="control">
-                                    <input class="input" type="color" value="{{ room.room_trim_color }}" name="room_trim_color" value="#FFFFFF">
+                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_trim_color }}" name="room_trim_color" value="#FFFFFF">
                                 </div>
                             </div>
                         </div>
