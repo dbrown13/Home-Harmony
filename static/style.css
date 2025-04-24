@@ -57,17 +57,6 @@ main {
   border: 2px solid black;
 }
 
-.column {
-  float: left;
-  width: 50%;
-}
-
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
 .login-form {
   padding: 20px;
   display: inline-block;
@@ -117,14 +106,12 @@ main {
 }
 
 .slider {
-  text-align: center;
   width: 300px;
   text-align: center;
   overflow: hidden;
 }
 
 .slides {
-  text-align: center;
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -338,9 +325,9 @@ main {
 }
 
 .form-container {
-  max-width: 300px;
+  max-width: 280px;
   padding: 10px;
-  background-color: white;
+  background-color: rgba(248, 247, 247, 0.966);
 }
 
 .form-container input[type=text], .form-container input[type=message] {
@@ -348,7 +335,7 @@ main {
   padding: 15px;
   margin: 5px 0 22px 0;
   border: none;
-  background: #f1f1f1;
+  background: #cccaca;
 }
 
 .form-container input[type=text]:focus, .form-container input[type=message]:focus {
@@ -361,11 +348,11 @@ main {
   padding: 15px;
   margin: 5px 0 22px 0;
   border: none;
-  background: #f1f1f1;
+  background: #a5a3a39f;
 }
 
 .form-container .btn {
-  background: #04AA6D;
+  background: #104e37;
   color: white;
   padding: 16px 20px;
   border: none;
@@ -376,7 +363,7 @@ main {
 }
 
 .form-container .cancel {
-  background-color: red;
+  background-color: rgb(151, 22, 22);
 }
 
 .form-container .btn:hover, .open-buton:hover {
@@ -393,4 +380,9 @@ main {
 
 #myRoomForm {
   display: none;
+}
+
+#myColorInput {
+  width: 150px;
+  height: 80px;
 }

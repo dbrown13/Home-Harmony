@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Home Harmony - Account</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <figure>
+        <img class="logo" width="150" src="/static/images/HomeHarmonyLogo.jpg" />
+    </figure>
+    <br>
+    <h1 class="app-title">Home Harmony</h1>
+    {% include "./navbar.html" %}
+    <main>
+      <form action="/update_user" method="post">
+        <div class="login-field">
+          <label class="label" for="username">Username</label>
+          <div class="control">
+            <input class="input" type="text" name="username" value="{{ user.username }}" placeholder="Enter username ..." required>
+          </div>
+        </div>
+        <br></br>
+        <div class="field">
+          <label class="label" for
+
+      <br></br>
+      <hr></hr>
+      <br></br>
+
+      <h3>Where all of your decoration and design ideas are brought to life!</h3>
+    </main>
+  </body>
+</html>

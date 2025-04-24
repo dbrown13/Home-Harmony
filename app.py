@@ -52,7 +52,6 @@ class OAuthCookie(OAuth2):
         return data["user_id"]       
 
 oauth_cookie = OAuthCookie()
-print(f"Cookie: {oauth_cookie}")
 if oauth_cookie == '401':
     print("Unauthorized")
     RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
@@ -63,12 +62,10 @@ async def root(
     request: Request, access_token: Annotated[str |None, Cookie()] = None
 )->HTMLResponse:
     context = {}
-    print(f"Access Token: {access_token}")
     if access_token:
         context["login"] = True
     else:
         context["login"] = False
-    print(context)
     return templates.TemplateResponse(request, "./index.html", context=context)
 
 @app.get("/signup")
@@ -100,6 +97,21 @@ async def add_user(request: Request, username : Annotated[str, Form()], password
     # create decor table for user
     return RedirectResponse("./login", status_code=status.HTTP_303_SEE_OTHER)
 
+@app.get("/account")
+async def get_user_info(
+    request: Request, 
+    access_token: Annotated[str | None, Cookie()] = None)->HTMLResponse:
+    user_id = None
+    if access_token:
+        user_id = decrypt_access_token(access_token)
+        if user_id:
+            user_id = user_id["user_id"]
+    assert isinstance(user_id, int) or user_id is None, "Invalid access token"
+    print(f"user_id: {user_id} is requesting account info")
+    context = get_user(connection, user_id).model_dump()
+    if access_token:
+        context["login"] = True
+    return templates.TemplateResponse(request, "./account.html", context=context)
 
 @app.get("/login")
 async def login(request: Request)->HTMLResponse:
@@ -191,14 +203,15 @@ async def get_rooms(
     #    return None
     if access_token:
         context["login"] = True
-    print(f"context: {context}")
     return templates.TemplateResponse(request, "./rooms.html", context=context)
 
 
 @app.get("/add_room")
 async def create_room(request: Request, user_id: int = Depends(oauth_cookie))->HTMLResponse:
     print(f"user_id: {user_id} is requesting to add a new room")
-    return templates.TemplateResponse(request, "./add_room.html", context={})
+    context = {}
+    context["login"] = True
+    return templates.TemplateResponse(request, "./add_room.html", context=context)
 
 @app.post("/add_room")
 async def add_room(
@@ -214,7 +227,6 @@ async def add_room(
     room_other_details : Annotated[str, Form()],
     user_id : int  = Depends(oauth_cookie)
 ):
-    print("In edit POST")
     print(f"user_id: {user_id} is adding room with name: {room_name}, description: {room_desc}")
     room = UserRoomId(
         room_name = room_name,
@@ -233,11 +245,9 @@ async def add_room(
 
 @app.get("/edit_room/{room_id}")
 async def edit_room(request: Request, room_id: int)->HTMLResponse:
-    print("In edit GET")
     room = get_room_by_id(connection, room_id)
-    print(room)
     images = readBlobData_by_room_id(connection, room_id)
-
+    print(f"User is requesting to edit room with id: {room_id}")
     # Convert binary data to base64 for display in HTML
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
@@ -258,7 +268,6 @@ async def edit_room(
         room_name = room_name,
         room_desc = room_desc,
         user_id = user_id)
-    print(room)
     update_room_by_id(connection, room)
     return RedirectResponse("/rooms", status_code=status.HTTP_303_SEE_OTHER)
 
@@ -286,7 +295,6 @@ async def confirm_delete(request: Request, room_id: int)->HTMLResponse:
 async def delete_room(request: Request, room_id: int)->HTMLResponse: 
     print(f"User is requesting to delete room with id: {room_id}")
     #room = get_room_by_id(connection, room_id)
-    #print(room)
     delete_room_by_id(connection, room_id)
     return RedirectResponse("/rooms", status_code=status.HTTP_303_SEE_OTHER)
 
@@ -318,10 +326,6 @@ async def upload_image_form(
     room_desc : Annotated[str, Form()] = None
 )->HTMLResponse:
     room_id = request.path_params["room_id"]
-    print("In upload GET")
-    print(f"ID: {room_id}")
-    print(f"Access Token: {access_token}")
-    print(f"Name: {room_name}, Description: {room_desc}")
     user_id = None
     if access_token:
         user_id = decrypt_access_token(access_token)
@@ -341,8 +345,6 @@ async def upload_image(file: UploadFile):
         with open(file_path, "wb") as f:
             while content:= await file.read(1024):
                 f.write(content)
-        print(f"filename: {file.filename}")
-        print(f"content type: {file.content_type}")
     except Exception as e:
         print(f"Error while uploading: {e}")
         raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
@@ -397,7 +399,6 @@ async def upload(request: Request,
     print(f"Image added: {successful_insert}")
     room = get_room_by_id(connection, room_id)    
     images = readBlobData_by_room_id(connection, room_id)
-    print("in post - images retrieved")
     # Convert binary data to base64 for display in HTML
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
@@ -414,7 +415,6 @@ async def main(request: Request):
 @app.get("/upload_success")
 async def upload_success(request: Request):
     context = {"request": request}
-    print("In upload success GET")
     return templates.TemplateResponse(request, "./upload_success.html", context={})
 
 @app.get("/edit_image/{room_id}/{image_id}")
@@ -422,7 +422,6 @@ async def edit_image(request: Request, room_id: int, image_id: int)->HTMLRespons
     print(f"User is requesting to edit image with id: {image_id}")
     room = get_room_by_id(connection, room_id)
     image = readBlobData_by_id(connection, image_id)
-    print(f"Image Name: {image.image_name}")
     # Convert binary data to base64 for display in HTML
     image.image_data = base64.b64encode(image.image_data).decode('utf-8')
     context = {"room": room, "image": image, "login": True}
@@ -436,7 +435,6 @@ async def edit_image(request: Request, room_id: int, image_id: int, image_name: 
         image_name = image_name,
         image_desc = image_desc
     )
-    print(image)
     successful = update_image_by_id(connection, image)
     return RedirectResponse(f"/room_images/{room_id}", status_code=status.HTTP_303_SEE_OTHER)
 
@@ -449,7 +447,6 @@ async def delete_image(request: Request, image_id: int)->HTMLResponse:
     images = delete_image_by_id(connection, room_id, image_id)
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
-    print("Image deleted") 
     context = {"room": room, "images": images, "login": True}
     return templates.TemplateResponse(request, "./room_images.html", context=context)
 
