@@ -38,6 +38,14 @@ label {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
 body {
   margin: 0px;
   background-color: rgb(178, 209, 198);
@@ -59,7 +67,9 @@ main {
 
 .login-form {
   padding: 20px;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-field {
@@ -67,9 +77,43 @@ main {
   padding: 55px;
 }
 
+.add-room-label {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-room-field {
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.column-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.three-columns {
+    column-count: 3;
+    text-align: center
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  width: 35%;
+}
+
 .input {
   padding: 7px;
   border-radius: 5px;
+  border: 2px solid black;
 }
 
 .button {
@@ -234,6 +278,7 @@ main {
   font-family: inherit; /* Important for vertical align on mobile phones */
   margin: 0; /* Important for vertical align on mobile phones */
 }
+
 .dropdown-content {
   display: none;
   position: absolute;
@@ -257,7 +302,6 @@ main {
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
   background-color: #ddd;
-
 }
 
 /* Show the dropdown menu on hover */
