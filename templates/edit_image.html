@@ -21,7 +21,7 @@
             <img id="preview" src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" width="200">
             <br>
             <input class="button is-success" type="submit" value="Save Changes">
-            <a class="button is-danger" href="/delete_image/{{ room.room_id }}/{{ image.image_id }}">Delete Image</a>
+            <a class="button" href="/delete_image/{{ room.room_id }}/{{ image.image_id }}">Delete Image</a>
             <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
         </form>
         <p id="serverMsg"></p>
