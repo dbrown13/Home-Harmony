@@ -17,52 +17,46 @@
             {% include "./navbar.html" %}
         </div>
     </div>
-    <hr>
-    <style>
-        .three-columns {
-            column-count: 3;
-        }
-        .two-columns {
-            column-count: 2;
-        }
-    </style>
+    <br>
     <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+        <div class="column">
             <form action="/add_room" method="post">
                 <div class="field">
-                    <label class="label" for="room_name">Room Name</label>
-                    <div class="control">
+                    <label class="add-room-label label" for="room_name">Room Name</label>
+                    <div class="control add-room-field">
                         <input class="input" type="text" name="room_name" placeholder="Enter name of room ..." required>
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label" for="room_desc">Room Theme / Description</label>
-                    <div class="control">
+                    <label class="label add-room-label" for="room_desc">Room Theme / Description</label>
+                    <div class="control add-room-field">
                         <textarea class="textarea" rows="3" cols="50" name="room_desc" placeholder="Enter description of room ..."></textarea>
                     </div>
                 </div>
                 <div class="column">
                     <div class="field">
-                        <label class="label" for="room_num_walls">Number of Walls to Decorate</label>
-                        <div class="control">
+                        <label class="label add-room-label" for="room_num_walls">Number of Walls to Decorate</label>
+                        <div class="control add-room-field">
                             <input class="input" type="number" value="4" name="room_num_walls" placeholder="Enter number of walls to decorate..." min="1" max="4" size="20">
                         </div>
                     </div>
                     <hr>
-                    <div class="three-columns">
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_wall_color1">Main Wall Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" name="room_wall_color1" value="#FFFFFF">
+                    <div class="column-conainer">
+                        <div class="three-columns">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_wall_color1">Main Wall Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" name="room_wall_color1" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_wall_color2">Accent Wall Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" name="room_wall_color2" value="#FFFFFF">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_wall_color2">Accent Wall Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" name="room_wall_color2" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,15 +87,21 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <hr>
                     <div class="field">
-                        <label class="label" for="room_other_details">Other Details</label>
-                        <div class="control">
-                            <textarea class="textarea" rows="3" cols="50" name="room_other_details" placeholder="Enter any additional details..."></textarea>
+                        <label class="label add-room-label" for="room_other_details">Other Details</label>
+                        <div class="control add-room-field">
+                            <textarea class="textarea" rows="5" cols="100" name="room_other_details" placeholder="Enter any additional details..."></textarea>
                         </div>
                     </div>
                 </div> 
                 <br>
-                <input class="button is-primary" type="submit">
+                <div class="center-container">
+                    <div class="vertical-center horizontal-position">
+                        <input class="button" type="submit">
+                    </div>
+                </div>
             </form>
         </div>
     </div>

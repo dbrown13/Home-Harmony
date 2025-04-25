@@ -27,7 +27,7 @@
                         <input class="input" type="text" name="username" placeholder="Enter username ...">
                     </div>
                 </div>
-                <br></br>
+                <br>
                 <div class="field">
                     <label class="label" for="password">Password (8 - 12 characters)</label>
                     <div class="control">
@@ -36,7 +36,6 @@
                 </div>
                 <br>
                 <input class="button is-primary" type="submit">
-                <br>
             </form>
             {% if taken %}
                 <div><b>Username {{ username }} is taken.  Pick a new username.</b></div>
@@ -45,6 +44,5 @@
             <p>Already signed up?  <a href="/">Log in here!</a></p>
         </div>
     </div>
-    <br>
 </body>
 </html>
