@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Account</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column">
+            <figure class="logo">
+                <img class="logo" width="150" src="static/images/HomeHarmonyLogo.jpg" />
+            </figure>
+            <br>
+            <h1 class="title">Verify Your Account Information</h1>
+            {% include "./navbar.html" %}
+        </div>
+    </div>
+    <hr>
+    <div class="login-form">
+        <div class="login-field">
+            <form action="/get_account" method="post">
+                <div class="login">
+                    <label class="label" for="username">Username</label>
+                    <div class="control">
+                        <input class="input" type="text" name="username" value="{{ user.username }}"  required>
+                    </div>
+                </div>
+                <br></br>
+                <div class="field">
+                    <label class="label" for="password">Password</label>
+                    <div class="control">
+                        <input class="input" type="password" name="password" placeholder="Enter current password ...">
+                    </div>
+                </div>
+                <br>
+                <input class="button" type="submit" value="Submit">
+                <input class="button is-light" type="button" value="Return" onclick=window.location.href='/home'>">
+            </form>
+            {% if incorrect_username %}
+            <div>
+                <p><b>Username not found. Please try again.</b></p>
+            </div>
+            {% elif incorrect_password %}
+                <div>
+                    <p><b>Password incorrect. Please try again.</b></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+</body>
+</html>

@@ -1,32 +1,57 @@
-<html>
-  <head>
-    <title>Home Harmony - Account</title>
-    <link rel="stylesheet" href="/static/style.css">
-  </head>
-  <body>
-    <figure>
-        <img class="logo" width="150" src="/static/images/HomeHarmonyLogo.jpg" />
-    </figure>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Update Account</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
     <br>
-    <h1 class="app-title">Home Harmony</h1>
-    {% include "./navbar.html" %}
-    <main>
-      <form action="/update_user" method="post">
-        <div class="login-field">
-          <label class="label" for="username">Username</label>
-          <div class="control">
-            <input class="input" type="text" name="username" value="{{ user.username }}" placeholder="Enter username ..." required>
-          </div>
+    <div class="columns">
+        <div class="column">
+            <figure class="logo">
+                <img class="logo" width="150" src="static/images/HomeHarmonyLogo.jpg" />
+            </figure>
+            <br>
+            <h1 class="title">Update Account Information</h1>
+            {% include "./navbar.html" %}
         </div>
-        <br></br>
-        <div class="field">
-          <label class="label" for
+    </div>
+    <hr>
+    <p>Username: {{ user.username }}</p>
 
-      <br></br>
-      <hr></hr>
-      <br></br>
-
-      <h3>Where all of your decoration and design ideas are brought to life!</h3>
-    </main>
-  </body>
+    <div class="login-form">
+        <div class="login-field">
+            <form action="/account" method="post">
+                <div class="login">
+                    <p>Update username if desired</p>
+                    <label class="label" for="username">Username</label>
+                    <div class="control">
+                        <input class="input" type="text" name="username" value="{{user.username }}"   required>
+                    </div>
+                </div>
+                <div class="field">
+                    <p>Enter new password or leave blank to keep existing</p>
+                    <label class="label" for="password">New Password</label>
+                    <div class="control">
+                        <input class="input" type="password" name="password" placeholder="Enter new password ...">
+                    </div>
+                </div>
+                <br>
+                <input class="button" type="submit" value="Update Account">
+                <input class="button" type="button" value="Return" onclick="window.location.href='/home'">
+                <input href = "/delete_account" class="delete-button" type="button" value="Delete Account" onclick="return confirm('Are you sure you want to delete your account?');">
+                <br>
+            </form>
+            {% if taken %}
+                <div><b>Username {{ username }} is taken.  Pick a new username.</b></div>
+            {% endif %}
+            {% if success %}
+                <div><b>Account updated successfully!</b></div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+</body>
 </html>

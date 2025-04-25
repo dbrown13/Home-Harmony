@@ -26,6 +26,14 @@
           </div>
           
         {% endfor %}
+      {% else %}
+        <p>You have no designs.  Click the button below to make one!</p>
+      {% endif %}
+      {% if success %}
+        <div><b>Room added successfully!</b></div>
+      {% endif %}
+      {% if delete_success %}
+        <div><b>Room deleted successfully!</b></div>
       {% endif %}
       <br></br>
       <hr></hr>

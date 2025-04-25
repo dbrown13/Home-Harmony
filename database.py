@@ -22,6 +22,7 @@ def create_user(connection: Connection,
     return True
 def get_user(connection: Connection,
              username: str)->Union[UserHashedIndex, None]:
+    print(f"Database: Getting user: {username}")
     with connection: 
         cur = connection.cursor()
         cur.execute(
@@ -33,10 +34,45 @@ def get_user(connection: Connection,
             (username,),
         )
         user = cur.fetchone()
+        print(f"Database: User: {user}")
         if user is None:
             return None
         return UserHashedIndex(**dict(user))
     
+def get_user_by_id(connection: Connection,
+                   user_id: int)->Union[UserHashedIndex, None]:
+    print(f"Database: Getting user by id: {user_id}")
+    with connection: 
+        cur = connection.cursor()
+        cur.execute(
+            """
+            SELECT user_id, username, salt, hash_password
+            FROM users
+            WHERE user_id = ?
+            """,
+            (user_id,),
+        )
+        user = cur.fetchone()
+        if user is None:
+            return None
+        return UserHashedIndex(**dict(user))
+    
+def update_user(connection: Connection,
+                   user: UserHashed)->bool:
+    with connection: 
+        print(f"Database: Updating user: {user}")
+        cur = connection.cursor()
+        cur.execute(
+            """
+            UPDATE users
+            SET username = ?, salt = ?, hash_password = ?
+            WHERE user_id = ?
+            """,
+            (user.username, user.salt, user.hash_password, user.user_id)
+        )
+    connection.commit()
+    return True
+
 def delete_user(connection: Connection,
                 user_id: int)->bool:
     with connection: 

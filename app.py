@@ -10,9 +10,9 @@ from fastapi.security import OAuth2
 # Other Imports
 from typing import Annotated
 from sqlite3 import Connection, Row
-from database import get_user_rooms, get_room_by_id, create_user, get_user, delete_user, delete_room_by_id
+from database import get_user_rooms, get_room_by_id, create_user, get_user, get_user_by_id, delete_user, delete_room_by_id
 from database import create_new_room, insertBLOB, readBlobData_by_room_id, readBlobData_by_id, update_room_by_id, delete_image_by_id
-from database import update_image_by_id, readBlobData_by_user_id, delete_uploaded_images
+from database import update_image_by_id, readBlobData_by_user_id, delete_uploaded_images, update_user
 from models import UserRoomId, UserHashed, UserID, UserImage, Room, ImageUpdate
 from secrets import token_hex
 from passlib.hash import pbkdf2_sha256
@@ -86,10 +86,10 @@ async def add_user(request: Request, username : Annotated[str, Form()], password
     hex_int = 15
     salt = token_hex(hex_int)
     # hash users password
-    hash_password = pbkdf2_sha256.hash(password + salt)
+    hash_password = pbkdf2_sha256.hash(password.strip() + salt)
     # update database
     hashed_user = UserHashed(
-        username = username,
+        username = username.strip(),
         salt = salt,
         hash_password = hash_password
     )
@@ -97,35 +97,114 @@ async def add_user(request: Request, username : Annotated[str, Form()], password
     # create decor table for user
     return RedirectResponse("./login", status_code=status.HTTP_303_SEE_OTHER)
 
-@app.get("/account")
+@app.get("/get_account")
+async def serve_user_form(
+    request: Request,
+    user_id: Annotated[int, Path()] = Depends(oauth_cookie)
+)-> HTMLResponse:
+    user = get_user_by_id(connection, user_id)
+    return templates.TemplateResponse(request, "./get_account.html", context={"user": user, "login": True})
+
+@app.post("/get_account")
 async def get_user_info(
-    request: Request, 
-    access_token: Annotated[str | None, Cookie()] = None)->HTMLResponse:
-    user_id = None
-    if access_token:
-        user_id = decrypt_access_token(access_token)
-        if user_id:
-            user_id = user_id["user_id"]
-    assert isinstance(user_id, int) or user_id is None, "Invalid access token"
-    print(f"user_id: {user_id} is requesting account info")
-    context = get_user(connection, user_id).model_dump()
-    if access_token:
-        context["login"] = True
+    request: Request,
+    username: Annotated[str, Form()] = None,
+    password : Annotated[str, Form()] = None,
+    user_id : Annotated[int, Path()] = Depends(oauth_cookie),
+    )->HTMLResponse:
+    print(f"APP - /get_account")
+    #Verify account info
+    user = get_user_by_id(connection, user_id)
+    print(f"username: {user.username}")
+    if user is None:
+        print("User not found")
+        context = {"user": user, "incorrect_username": True}
+        return templates.TemplateResponse(request, "./get_account.html", context=context)
+    if not pbkdf2_sha256.verify(password + user.salt, user.hash_password):
+        print("Incorrect password")
+        context = {"user": user, "incorrect_password": True}
+        return templates.TemplateResponse(request, "./get_account.html", context=context)
+
+    print("User found")
+    context = {"user": user, "login": True}
     return templates.TemplateResponse(request, "./account.html", context=context)
+
+""" @app.get("/account")
+async def get_update_page(
+    request: Request,
+    user_id : Annotated[int, Path()] = Depends(oauth_cookie),
+    username: Annotated[str, Form()] = None,
+    password : Annotated[str, Form()] = None
+)->HTMLResponse:
+    print(f"APP - /account  GET")
+    print(f"username: {username}")
+    #Verify login info
+    user = get_user_by_id(connection, user_id)
+    print(f"username: {user.username}")
+    if user is None:
+        print("User not found")
+        context = {"incorrect_username": True}
+        return templates.TemplateResponse(request, "./get_account.html", context=context)
+    if not pbkdf2_sha256.verify(password + user.salt, user.hash_password):
+        print("Incorrect password")
+        context = {"incorrect_password": True}
+        return templates.TemplateResponse(request, "./get_account.html", context=context)
+
+    print("User found")
+    context = {"user": user, "login": True}
+    
+    return templates.TemplateResponse(request, "./account.html", context=context)
+ """
+@app.post("/account")
+async def get_user_info(
+    request: Request,
+    user_id : Annotated[int, Path()] = Depends(oauth_cookie),
+    username : Annotated[str, Form()] = None,
+    password : Annotated[str, Form()] = None,
+)->HTMLResponse:
+    print(f"user_id: {user_id} is requesting account update")
+    print(f"username: {username}")
+    print(f"password: {password}")
+    user = get_user_by_id(connection, user_id)
+    if user is None:
+        return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
+    # See if username changed
+    print("user is not None")
+    print(f"username: {username}")
+    print(f"user.username: {user.username}")
+    # Remove leading and trailing whitespace from username
+    user.username = user.username.strip()
+    username = username.strip()
+    if user.username != username:
+        # Check if new username already exists
+        existing_user = get_user(connection, username)
+        print(f"existing_user: {existing_user}")
+        if existing_user is not None:
+            return templates.TemplateResponse(request, "./account.html", context={'taken': True, 'user': user})
+        # update username in user model
+        user.username = username
+    if password:
+        # update password in user model
+        print(f"update password")
+        user.hash_password = pbkdf2_sha256.hash(password + user.salt)
+    # update user in database   
+    update_user(connection, user) 
+    return templates.TemplateResponse(request, "./account.html", context={'success': True, 'user': user})
 
 @app.get("/login")
 async def login(request: Request)->HTMLResponse:
-    return templates.TemplateResponse(request, "./login.html", context={})
+    return templates.TemplateResponse(request, "./index.html", context={})
 
 
 @app.post("/login")
 async def login_user(request: Request, username : Annotated[str, Form()], password : Annotated[str, Form()]):      
-    user = get_user(connection, username)
+    print(f"APP - /login")
+    user = get_user(connection, username.strip())
     if user is None:
-        return templates.TemplateResponse(request, "./login.html", context={'incorrect_username': True, 'username': username})
-    correct_pwd = pbkdf2_sha256.verify(password + user.salt, user.hash_password)
+        return templates.TemplateResponse(request, "./index.html", context={'incorrect_username': True, 'username': username})
+    correct_pwd = pbkdf2_sha256.verify(password.strip() + user.salt, user.hash_password)
     if not correct_pwd:
-        return templates.TemplateResponse(request, "./login.html", context={'incorrect_password': True})
+        return templates.TemplateResponse(request, "./index.html", context={'incorrect_password': True})
     
     token = jwt.encode(
         {
@@ -158,13 +237,36 @@ async def logout(
     response = RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie("access_token")
     os.environ['LOGIN_STATUS'] = 'False'
-    delete_uploaded_images()
+    #delete_uploaded_images()
     return response
 
+@app.post("/update_username")
+async def update_username(
+    request: Request,
+    user: UserID,
+    new_username : Annotated[str, Form()]
+)->HTMLResponse:
+    print(f"User {user.username} is updating username to {new_username}")
+    # check if user exists
+    user = get_user_by_id(connection, user.user_id)
+    if user is None:
+        return RedirectResponse("/login", status_code=status.HTTP_303_SEE_OTHER)
+    # check if new username already exists
+    existing_user = get_user(connection, new_username)
+    if existing_user is not None:
+        return templates.TemplateResponse(request, "./account.html", context={'username_taken': True})
+    # update username in database
+    user.username = new_username
+    update_user(connection, user)
+    return RedirectResponse("/account", status_code=status.HTTP_303_SEE_OTHER)
+
 @app.delete("/delete_acct")
-async def delete_acct(user: UserID):
-    # delete all decor tables for user
+async def delete_acct(
+    request: Request,
+    user: UserID = Depends(oauth_cookie),
+)->HTMLResponse:
     delete_user(connection, user.user_id)
+    return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get("/home")
 async def home(
