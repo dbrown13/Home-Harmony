@@ -376,13 +376,13 @@ async def edit_room(
 @app.get("/room_images/{room_id}")
 async def room_images(request: Request, room_id: int)->HTMLResponse:
     room_id = request.path_params["room_id"]
-    print(f"User is requesting images for room with id: {room_id}")
+    print(f"room_image: User is requesting images for room with id: {room_id}")
     room = get_room_by_id(connection, room_id)
     images = readBlobData_by_room_id(connection, room_id)
     # Convert binary data to base64 for display in HTML
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
-    context = {"images": images, "room": room, "login": True}
+    context = {"images": images, "room": room, "login": True, "image_msg": None}
     return templates.TemplateResponse(request, "./room_images.html", context=context)
 
 # Ask user for verification of delete before deleting a room
@@ -433,9 +433,10 @@ async def upload_image_form(
         user_id = decrypt_access_token(access_token)
         if user_id:
             user_id = user_id["user_id"]
-    context = {"request": request, "room_id": room_id, "user_id": user_id, "login": user_id is not None} 
+    context = {"request": request, "room_id": room_id, "user_id": user_id, "login": user_id is not None, "image_msg": None} 
     assert isinstance(user_id, int) or user_id is None, "Invalid access token"
-    print(f"User is requesting upload image form for room with id: {room_id}")
+    print(f"Upload_image_form: User is requesting upload image form for room with id: {room_id}")
+    print(f"Context: {context}")
     return templates.TemplateResponse(request, "./upload_image.html", context=context)
 
 @app.post("/newupload_image/{room_id}")
@@ -453,19 +454,20 @@ async def upload_image(file: UploadFile):
 
 
 @app.post("/upload_image/{room_id}")
-#async def upload(
-#    request: Request,
-#    image_name: Annotated[str, Form()],
-#    image_desc: Annotated[str, Form()],
-#    file: UploadFile,
-#    access_token: Annotated[str | None, Cookie()] = None):
-#    print(f"filename: {file.filename}")
-async def upload(request: Request, 
-           file: UploadFile = File(...),
-           image_name: Annotated[str, Form()] = None,
-           image_desc: Annotated[str, Form()] = None,
-           access_token: Annotated[str | None, Cookie()] = None):
-    print("In upload POST")
+async def upload(
+    request: Request,
+    image_name: Annotated[str, Form()],
+    image_desc: Annotated[str, Form()],
+    image_msg: Annotated[str, Form()],
+    file: UploadFile,
+    access_token: Annotated[str | None, Cookie()] = None):
+    print(f"filename: {file.filename}")
+#async def upload(request: Request, 
+#           file: UploadFile = File(...),
+#           image_name: Annotated[str, Form()] = None,
+#           image_desc: Annotated[str, Form()] = None,
+#           access_token: Annotated[str | None, Cookie()] = None):
+#    print("In upload POST")
     filename = file.filename
     room_id = request.path_params["room_id"]
 
@@ -505,8 +507,8 @@ async def upload(request: Request,
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
 
-    context = {"file": file, "image": image, "room": room, "login": True}
-    return templates.TemplateResponse(request, "./upload_success.html", context=context)
+    context = {"file": file, "image": image, "room": room, "login": True, "image_msg": image_msg}
+    return templates.TemplateResponse(request, "/upload_image.html", context=context)
     #return templates.TemplateResponse(request, "./edit_room.html", context=context)  
 
 @app.get("/upload")

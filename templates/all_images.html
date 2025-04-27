@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - All Images</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <br>
@@ -33,13 +33,13 @@
                 {% for image in images.images %}
                     <div class="card">
                         <div class="card-image">
-                            <figure class="image is-4by3">
-                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image">
+                            <figure class="image">
+                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" class="card-image">
                             </figure>
                         </div>
                         <div class="card-content">
-                            <p class="title is-4">{{ image.image_name }}</p>
-                            <p class="subtitle is-6">{{ image.image_desc }}</p>
+                            <p class="card-title">{{ image.image_name }}</p>
+                            <p class="card-text">{{ image.image_desc }}</p>
                         </div>
 
                     </div>

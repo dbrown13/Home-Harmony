@@ -23,7 +23,7 @@
     </div>
     <hr>
     <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+        <div class="column">
             <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
                     <label class="label" for="room_name">Room Name</label>
@@ -105,8 +105,8 @@
                     </div>
                 </div> 
                 <br>
-                <input class="button is-primary" type="submit">
-                <a href="/room_images/{{ room.room_id }}" class="button is-success">Images</a>
+                <input class="button" type="submit">
+                <a href="/room_images/{{ room.room_id }}" class="button">Images</a>
                 <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()">
             </form>
         </div>
