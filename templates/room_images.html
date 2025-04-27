@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - Room Images</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <br>
@@ -27,18 +27,18 @@
     </div>
     <hr>
     <div class="columns">
-        <div class="column is-half is-offset-one-quarter">
+        <div class="column">
             {% if images["images"] %}
                 {% for image in images.images %}
                     <div class="card">
                         <div class="card-image">
-                            <figure class="image is-4by3">
-                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image">
+                            <figure class="image">
+                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" style="width:50%">
                             </figure>
                         </div>
                         <div class="card-content">
-                            <p class="title is-4">{{ image.image_name }}</p>
-                            <p class="subtitle is-6">{{ image.image_desc }}</p>
+                            <p class="card-title">{{ image.image_name }}</p>
+                            <p class="card-text">{{ image.image_desc }}</p>
                         </div>
                         <footer class="card-footer">
                             <button class="button"><a style="color: white;" href="/edit_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Edit Image</a></button>

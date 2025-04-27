@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Harmony - Projects</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+</head>
+<body>
+    <div id="content">
+    <h1 class="title">Manage Projects</h1>
+        {% if not projects %}
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-header-title">No projects found.</p>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <a href="/add_project" class="card-footer-item">Add New Project</a>
+            </footer>
+        {% else %}
+            {% for project in projects %}
+            <div class="card">
+                <div class="card-header">
+                    <header class="card-header"></header>
+                        <p class="card-header-title">Project Title: {{ project.project_title }}</p>
+                </div>
+                <div class="card-content">
+    <!--                 <div class="card-image">
+                        <figure class="image is-5by4">
+                            <img 
+                                src="https://bulma.io/assets/images/placeholders/600x480.png"
+                                alt="Placeholder image"
+                            />
+                        </figure>
+                    </div> -->
+                    <p>Description: {{ project.project_desc }}</p>
+                    <p>Project ID: {{ project.project_id }}</p>
+                    <p>User ID: {{ project.user_id }}</p>
+                </div>
+                <footer class="card-footer">
+                    <a href="/edit_project/{{ project.project_id }}" class="card-footer-item">Edit Project</a>
+                    <a href hx-delete="/delete_project/{{ project.project_id }}" class="card-footer-item"
+                    hx-confirm = "Are you sure you want to delete this project?" hx-target="#content" hx-swap="outerHTML"
+                    class="card-footer-item">Delete Project</a>
+                </footer>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+</html>

@@ -1,6 +1,7 @@
 <script type="text/javascript">
     function previewFile() {
-        const preview = document.querySelector('img');
+        const preview = document.querySelector('img[name="preview"]');
+        
         var file = document.getElementById('fileInput').files[0];
         const reader = new FileReader();
         reader.addEventListener("load", function() {
@@ -24,6 +25,7 @@
             formData.append('image_desc', image_desc);
             formData.append('room_id', room_id);
             formData.append('access_token', access_token);
+            formData.append('image_msg', 'Image uploaded successfully!');
             fetch('/upload_image/{{ room_id }}', {
                     method: 'POST',
                     body: formData,
@@ -38,36 +40,49 @@
         }
     }
 </script>
-<link rel="stylesheet" href="../static/style.css">
-<br>
-<div class="columns">
-    <div class="column">
-        <figure>
-            <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg"/>
-        </figure>
-        <h1 class="title">Add an Image</h1>
-        {% include "./navbar.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>Home Harmony - Add Image</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column">
+            <figure>
+                <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg"/>
+            </figure>
+            <h1 class="title">Add an Image</h1>
+            {% include "./navbar.html" %}
+        </div>
     </div>
-</div>
-<div class="login-form">
-    <div class="login-field">
-        <form class="add-form">
-            <br></br>
-            <label class="label">Image Title:</label>
-            <input style="width: 100%;" class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ...">
-            <br></br>
-            <label class="label">Image Description:</label>
-            <textarea style="width: 100%;" class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea>
-            <br></br>
-            <input class="button" type="file" id="fileInput" onchange="previewFile()">
-            <br></br>
-            <br></br>
-            <input class="button is-success" type="button" value="Upload Image" onclick="uploadFile()">
-            <button class="button"><a style="text-decoration: none;" class="button is-danger" href="/room_images/{{ room_id }}">Return</a></button>
-            <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()"> 
-            <br></br>
-        </form>
+    <div class="login-form">
+        <div class="login-field">
+            <form class="add-form">
+                <br></br>
+                <label class="label">Image Title:</label>
+                <input style="width: 100%;" class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ...">
+                <br></br>
+                <label class="label">Image Description:</label>
+                <textarea style="width: 100%;" class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea>
+                <br></br>
+                <input class="button" type="file" id="fileInput" onchange="previewFile()">
+                <br></br>
+                <br></br>
+                <input class="button" type="button" value="Upload Image" onclick="uploadFile()">
+                <button class="button"><a class="button" href="/room_images/{{ room_id }}">Return</a></button>
+                <input class="button " type="button" value="Cancel" onclick="window.history.back()"> 
+                <br></br>
+                <img class="image-preview" name="preview" height="200">
+            </form>
+            {% if image_msg %}
+                <p id="serverMsg">{{ image_msg }}</p>
+            {% endif %}
+        </div>
     </div>
-</div>
-<p id="serverMsg"></p>
-<img height="200">
+</body> 
+</html
