@@ -419,10 +419,50 @@ main {
   border-radius: 5px;
 }
 
+.card-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-content {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+}
+
 .card-container {
   background-color: #e8f2ed;
   padding: 20px 16px;
   border-radius: 5px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-text {
+  font-size: 16px;
+  text-align: center;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .form-popup {
@@ -478,7 +518,7 @@ main {
 
 .form-container .btn:hover, .open-buton:hover {
   opacity: 1;
-}  
+}
   
 #myContactForm {
   display: none;
