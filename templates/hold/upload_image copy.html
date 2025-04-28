@@ -1,0 +1,91 @@
+<script type="text/javascript">
+    function previewFile() {
+        const preview = document.querySelector('img[name="preview"]');
+        
+        var file = document.getElementById('fileInput').files[0];
+        const reader = new FileReader();
+        reader.addEventListener("load", function() {
+            preview.src = reader.result; // show image in <img> tag
+        }, false);
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function uploadFile(file) {
+        const access_token = '{{ access_token }}'; // replace with your access token
+        const room_id = '{{ room_id }}';
+        var file = document.getElementById('fileInput').files[0];
+        var image_name = document.getElementById('image_name').value;
+        var image_desc = document.getElementById('imageDescription').value;
+        console.log("uploadFile function called");
+        if (file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('image_name', image_name);
+            formData.append('image_desc', image_desc);
+            formData.append('room_id', room_id);
+            formData.append('access_token', access_token);
+            formData.append('image_msg', 'Image uploaded successfully!');
+            console.log("Form data prepared:", formData);
+            fetch('/upload_image/{{ room_id }}', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("serverMsg").innerHTML = data.message;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/style.css">
+    <title>Home Harmony - Add Image</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <br>
+    <div class="columns">
+        <div class="column">
+            <figure>
+                <img class="logo" width="120" src="/static/images/HomeHarmonyLogo.jpg"/>
+            </figure>
+            <h1 class="title">Add an Image</h1>
+            {% include "./navbar.html" %}
+        </div>
+    </div>
+    <div class="login-form">
+        <div class="login-field">
+            <form class="add-form">
+                <br></br>
+                <label class="label">Image Title:</label>
+                <input style="width: 100%;" class="input" type="text" id="image_name" name="image_name" placeholder="Enter image name ...">
+                <br></br>
+                <label class="label">Image Description:</label>
+                <textarea style="width: 100%;" class="textarea" id="imageDescription" name="image_desc" rows="3" cols="50" placeholder="Enter image description ..."></textarea>
+                <br></br>
+                <input class="button" type="file" id="fileInput" onchange="previewFile()">
+                <br></br>
+                <br></br>
+                <input class="button" type="button" value="Upload Image" onclick="uploadFile()">
+                <button class="button"><a class="button" href="/room_images/{{ room_id }}">Return</a></button>
+                <input class="button " type="button" value="Cancel" onclick="window.history.back()"> 
+                <br></br>
+                <img class="image-preview" name="preview" height="200">
+            </form>
+            <p>Image Msg: {{ image_msg}} </p>
+            {% if image_msg %}
+                <p id="serverMsg">{{ image_msg }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body> 
+</html
