@@ -18,6 +18,7 @@
         var file = document.getElementById('fileInput').files[0];
         var image_name = document.getElementById('image_name').value;
         var image_desc = document.getElementById('imageDescription').value;
+        console.log("uploadFile function called");
         if (file) {
             var formData = new FormData();
             formData.append('file', file);
@@ -26,6 +27,7 @@
             formData.append('room_id', room_id);
             formData.append('access_token', access_token);
             formData.append('image_msg', 'Image uploaded successfully!');
+            console.log("Form data prepared:", formData);
             fetch('/upload_image/{{ room_id }}', {
                     method: 'POST',
                     body: formData,
@@ -79,6 +81,7 @@
                 <br></br>
                 <img class="image-preview" name="preview" height="200">
             </form>
+            <p>Image Msg: {{ image_msg}} </p>
             {% if image_msg %}
                 <p id="serverMsg">{{ image_msg }}</p>
             {% endif %}
