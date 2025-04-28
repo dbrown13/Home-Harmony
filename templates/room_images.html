@@ -22,6 +22,13 @@
 
             <br>
             <h2 class="title">Your {{ room.room_name }} Images</h2>
+            {% if image_msg %}
+                <h5>
+                    {{ image_msg }}
+                </h5>
+            {% else %}
+                <br>
+            {% endif %}
 
         </div>
     </div>

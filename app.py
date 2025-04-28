@@ -1,6 +1,8 @@
 # FastAPI Imports
 import base64
+import shutil
 from fastapi import FastAPI, Form, File, status, Depends, UploadFile, Cookie, HTTPException
+from fastapi import requests
 from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -19,6 +21,7 @@ from passlib.hash import pbkdf2_sha256
 import jwt as jwt
 from pathlib import Path
 import os
+import requests
 
 
 # Initialize FastAPI
@@ -36,6 +39,9 @@ templates = Jinja2Templates('./templates')
 SECRET_KEY = "38271a4d89d6dd985ef820ef83aa2cd0a947f4f3622112ae456a04f5b6bbf65f"
 ALGORITHM = "HS256"
 EXPIRATION_TIME = 3600
+
+UPLOAD_DIR = Path("./static/uploads")
+
 
 def decrypt_access_token(access_token: str | None) -> dict[str, str | int] | None:
     if access_token is None:
@@ -423,16 +429,11 @@ async def all_images(
 async def upload_image_form(
     request: Request,
     room_id: int = None,
-    access_token: Annotated[str | None, Cookie()] = None,
+    user_id: int = Depends(oauth_cookie),
     room_name : Annotated[str, Form()] = None, 
     room_desc : Annotated[str, Form()] = None
 )->HTMLResponse:
     room_id = request.path_params["room_id"]
-    user_id = None
-    if access_token:
-        user_id = decrypt_access_token(access_token)
-        if user_id:
-            user_id = user_id["user_id"]
     context = {"request": request, "room_id": room_id, "user_id": user_id, "login": user_id is not None, "image_msg": None} 
     assert isinstance(user_id, int) or user_id is None, "Invalid access token"
     print(f"Upload_image_form: User is requesting upload image form for room with id: {room_id}")
@@ -440,14 +441,42 @@ async def upload_image_form(
     return templates.TemplateResponse(request, "./upload_image.html", context=context)
 
 @app.post("/newupload_image/{room_id}")
-async def upload_image(file: UploadFile):
+async def upload_image(
+    request: Request,
+    image_name: Annotated[str, Form()],
+    image_desc: Annotated[str, Form()],
+    image_msg: Annotated[str, Form()],
+    file: UploadFile = File(...),
+    user_id: int = Depends(oauth_cookie),
+)->HTMLResponse:
+    room_id = request.path_params["room_id"]
+    print(f"filename: {file.filename}")
+
+
+    # Create the uploads directory if it doesn't exist
+    # and save the file to that directory
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+    file_path = UPLOAD_DIR + file.filename
+
     try:
-        upload_dir = Path("./static/uploads")
-        os.makedirs(upload_dir, exist_ok=True)
-        file_path = os.pathmjoin(upload_dir, file.filename)
-        with open(file_path, "wb") as f:
-            while content:= await file.read(1024):
-                f.write(content)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        image_path = f"./static/uploads/uploaded_{file.filename}"
+        file_ext = file.filename.split('.')[-1]
+
+        image = UserImage(
+            image_name = image_name,
+            image_desc = image_desc,
+            image_filename = image_path,
+            image_type = file_ext,
+            user_id = user_id,
+            room_id = room_id
+        )
+        print(f"Image: {image}")
+        insertBLOB(connection, image)
+            
+        print(f"File {file.filename} uploaded successfully to {file_path}")
     except Exception as e:
         print(f"Error while uploading: {e}")
         raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
@@ -458,26 +487,14 @@ async def upload(
     request: Request,
     image_name: Annotated[str, Form()],
     image_desc: Annotated[str, Form()],
-    image_msg: Annotated[str, Form()],
-    file: UploadFile,
-    access_token: Annotated[str | None, Cookie()] = None):
+    file: UploadFile = File(...),
+    user_id: int = Depends(oauth_cookie),
+    )->HTMLResponse:
     print(f"filename: {file.filename}")
-#async def upload(request: Request, 
-#           file: UploadFile = File(...),
-#           image_name: Annotated[str, Form()] = None,
-#           image_desc: Annotated[str, Form()] = None,
-#           access_token: Annotated[str | None, Cookie()] = None):
-#    print("In upload POST")
+
     filename = file.filename
     room_id = request.path_params["room_id"]
 
-    user_id = None
-    if access_token:
-        user_id = decrypt_access_token(access_token)
-        if user_id:
-            user_id = user_id["user_id"]
-    assert isinstance(user_id, int) or user_id is None, "Invalid access token"
-    print(f"User_id: {user_id}" )
     # save image to static/uploads/uploaded_filename
     try:
         contents = file.file.read()
@@ -500,16 +517,19 @@ async def upload(
         room_id = room_id
     )
     successful_insert = insertBLOB(connection, image)
-    print(f"Image added: {successful_insert}")
+    if successful_insert:
+        image_msg = "Image uploaded successfully"
+    else:
+        image_msg = "Image upload failed"
+
     room = get_room_by_id(connection, room_id)    
     images = readBlobData_by_room_id(connection, room_id)
     # Convert binary data to base64 for display in HTML
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
-
-    context = {"file": file, "image": image, "room": room, "login": True, "image_msg": image_msg}
-    return templates.TemplateResponse(request, "/upload_image.html", context=context)
-    #return templates.TemplateResponse(request, "./edit_room.html", context=context)  
+    context = {"room": room, "images": images, "image_msg": image_msg, "login": True}
+    #return templates.TemplateResponse(request, "./upload_success.html", context=context)
+    return templates.TemplateResponse(request, "./room_images.html", context=context)
 
 @app.get("/upload")
 async def main(request: Request):
