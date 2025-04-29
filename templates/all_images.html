@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - All Images</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
     <br>
@@ -30,7 +30,48 @@
     <div class="columns">
         <div class="column">
             {% if images["images"] %}
+                {% set cur_room = images.images[0].room_name %}
+                {% set cur_id = images.images[0].room_id %}
+                <form action="/upload_image_form/{{ cur_id }}" method="post">
+                <div class="card">
+                    <h4>Room: {{ cur_room }}</h4>
                 {% for image in images.images %}
+                    {% if image.room_name == cur_room %}
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" class="card-image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="card-title">{{ image.image_name }}</p>
+                            <p class="card-text">{{ images.image_desc }}</p>
+                        </div>
+                        <hr>
+                    {% else %}
+                            <button type="submit" class="button">Add Image to Room</button>
+                            {% set cur_room = image.room_name %}
+                            {% set cur_id = image.room_id %}
+                        </div>
+                        </form> 
+                        <form action="/upload_image_form/{{ cur_id }}" method="postt">
+                        <div class="card"> 
+                            <h4>Room: {{ cur_room }}</h4>
+                            <div class="card-image">
+                                <figure class="image">
+                                    <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" class="card-image">
+                                </figure>
+                            </div>
+                        <div class="card-content">
+                            <p class="card-title">{{ image.image_name }}</p>
+                            <p class="card-text">{{ image.image_desc }}</p>
+                        </div>
+                        <hr>
+                    {% endif %} 
+           <!--              <div class="card-image">
+                            <figure class="image">
+                                <img src="data:image/{{ image.image_type }};base64,{{ image.image_data }}" alt="Room Image" class="card-image">
+                            </figure>
+                        </div>
                     <div class="card">
                         <div class="card-image">
                             <figure class="image">
@@ -43,12 +84,14 @@
                         </div>
 
                     </div>
-                    <br>
+                    <br> -->
                 {% endfor %}
+                    <button type="submit" class="button">Add Image to Room</button>
+                </div>
+                </form>
             {% else %}
                 <p><em>&nbsp&nbsp&nbsp&nbspNo images available.</em></p>
             {% endif %}
         </div>
     </div>
-</body>
 </html>

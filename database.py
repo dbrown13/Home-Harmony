@@ -2,7 +2,8 @@ import sqlite3
 from sqlite3 import Connection
 from typing import List, Union
 from pydantic import ValidationError
-from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images
+from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images, UserRoomName, RoomNames
+from models import ImageJoin, ImageJoinList
 import os
 import shutil
 
@@ -48,6 +49,7 @@ def get_user_by_id(connection: Connection,
             """
             SELECT user_id, username, salt, hash_password
             FROM users
+            ORDER BY room_id ASC
             WHERE user_id = ?
             """,
             (user_id,),
@@ -256,8 +258,9 @@ def insertBLOB(connection: Connection, image: UserImage)->bool:
         cur.execute(sqlite_insert_blob_query, data_tuple)    
         connection.commit()
         print("Image and file inserted successfully as a BLOB into a table")
-
     return True
+
+
 
 def writeTofile(data, filename):
     # Convert binary data to proper format and write it on Hard Disk
@@ -349,7 +352,41 @@ def readBlobData_by_user_id(connection: Connection, userid : int)->None:
             image_list.append(ImageRetrieve.model_validate(image))
         images = dict(images=image_list)   
         return images
-        
+
+def readBlobData_inner_join(connection: Connection, user_id: int)->None:
+    print("Fetching BLOB inner join data")    
+    with connection:
+        cur = connection.cursor()
+        sql_fetch_blob_query = """SELECT images.*, rooms.room_name 
+                                FROM images 
+                                INNER JOIN rooms ON rooms.room_id = images.room_id 
+                                WHERE images.user_id =?
+                                ORDER BY images.room_id"""
+        cur.execute(sql_fetch_blob_query, (user_id,))
+        image_list = []
+        rows = cur.fetchall()
+        for row in rows:
+            image_id = row[0]
+            image_name = row[1]
+            image_desc = row[2]
+            image_data = row[3]
+            image_type = row[4]
+            user_id = row[5]
+            room_id = row[6]
+            room_name = row[7]
+            image = {"image_id": image_id,
+                     "image_name": image_name,
+                     "image_desc": image_desc,
+                     "image_data": image_data,
+                     "image_type": image_type,
+                     "room_id": room_id,
+                     "user_id": user_id,
+                     "room_name": room_name}
+            image_list.append(ImageJoin.model_validate(image))
+            
+        images = dict(images=image_list)   
+        return images
+
 def delete_image_by_id(connection: Connection, room_id: int, image_id: int)->bool:
     print("Deleting image_id: ", image_id, " from room_id: ", room_id)
     with connection:
