@@ -1,8 +1,13 @@
 from pydantic import BaseModel
 from typing import List
 
-class UserRoom(BaseModel):
+class UserRoomName(BaseModel):
     room_name: str
+
+class RoomNames(UserRoomName):
+    rooms: List[UserRoomName]
+
+class UserRoom(UserRoomName):
     room_desc: str
     room_num_walls: int
     room_wall_color1: str
@@ -45,8 +50,14 @@ class ImageRetrieve(ImageUpdate):
     room_id: int
     user_id: int
 
+class ImageJoin(ImageRetrieve):
+    room_name: str
+
 class Images(BaseModel):
     images: List[ImageRetrieve]
+
+class ImageJoinList(BaseModel):
+    image_joins: List[ImageJoin]
 
 class User(BaseModel):
     username: str

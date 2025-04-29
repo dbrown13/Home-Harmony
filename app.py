@@ -14,13 +14,15 @@ from typing import Annotated
 from sqlite3 import Connection, Row
 from database import get_user_rooms, get_room_by_id, create_user, get_user, get_user_by_id, delete_user, delete_room_by_id
 from database import create_new_room, insertBLOB, readBlobData_by_room_id, readBlobData_by_id, update_room_by_id, delete_image_by_id
+from database import readBlobData_inner_join 
 from database import update_image_by_id, readBlobData_by_user_id, delete_uploaded_images, update_user
-from models import UserRoomId, UserHashed, UserID, UserImage, Room, ImageUpdate
+from models import UserRoomId, UserHashed, UserID, UserImage, Room, ImageUpdate, UserRoomName, RoomNames
 from secrets import token_hex
 from passlib.hash import pbkdf2_sha256
 import jwt as jwt
 from pathlib import Path
 import os
+import requests
 
 
 # Initialize FastAPI
@@ -134,32 +136,6 @@ async def get_user_info(
     context = {"user": user, "login": True}
     return templates.TemplateResponse(request, "./account.html", context=context)
 
-""" @app.get("/account")
-async def get_update_page(
-    request: Request,
-    user_id : Annotated[int, Path()] = Depends(oauth_cookie),
-    username: Annotated[str, Form()] = None,
-    password : Annotated[str, Form()] = None
-)->HTMLResponse:
-    print(f"APP - /account  GET")
-    print(f"username: {username}")
-    #Verify login info
-    user = get_user_by_id(connection, user_id)
-    print(f"username: {user.username}")
-    if user is None:
-        print("User not found")
-        context = {"incorrect_username": True}
-        return templates.TemplateResponse(request, "./get_account.html", context=context)
-    if not pbkdf2_sha256.verify(password + user.salt, user.hash_password):
-        print("Incorrect password")
-        context = {"incorrect_password": True}
-        return templates.TemplateResponse(request, "./get_account.html", context=context)
-
-    print("User found")
-    context = {"user": user, "login": True}
-    
-    return templates.TemplateResponse(request, "./account.html", context=context)
- """
 @app.post("/account")
 async def get_user_info(
     request: Request,
@@ -417,11 +393,14 @@ async def all_images(
     request: Request,
     user_id : int  = Depends(oauth_cookie))->HTMLResponse:
     print(f"User is requesting all images")
-    images = readBlobData_by_user_id(connection, user_id)
+    #images = readBlobData_by_user_id(connection, user_id)
+    images = readBlobData_inner_join(connection, user_id)
+    context = get_user_rooms(connection, user_id).model_dump()
     # Convert binary data to base64 for display in HTML
     for item in images["images"]:
         item.image_data = base64.b64encode(item.image_data).decode('utf-8')
-    context = {"images": images, "login": True}
+    context["images"] = images
+    context["login"] = True
     return templates.TemplateResponse(request, "./all_images.html", context=context)
 
 @app.post("/upload_image_form/{room_id}")
@@ -438,47 +417,6 @@ async def upload_image_form(
     print(f"Upload_image_form: User is requesting upload image form for room with id: {room_id}")
     print(f"Context: {context}")
     return templates.TemplateResponse(request, "./upload_image.html", context=context)
-
-@app.post("/newupload_image/{room_id}")
-async def upload_image(
-    request: Request,
-    image_name: Annotated[str, Form()],
-    image_desc: Annotated[str, Form()],
-    image_msg: Annotated[str, Form()],
-    file: UploadFile = File(...),
-    user_id: int = Depends(oauth_cookie),
-)->HTMLResponse:
-    room_id = request.path_params["room_id"]
-    print(f"filename: {file.filename}")
-
-
-    # Create the uploads directory if it doesn't exist
-    # and save the file to that directory
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    file_path = UPLOAD_DIR + file.filename
-
-    try:
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-
-        image_path = f"./static/uploads/uploaded_{file.filename}"
-        file_ext = file.filename.split('.')[-1]
-
-        image = UserImage(
-            image_name = image_name,
-            image_desc = image_desc,
-            image_filename = image_path,
-            image_type = file_ext,
-            user_id = user_id,
-            room_id = room_id
-        )
-        print(f"Image: {image}")
-        insertBLOB(connection, image)
-            
-        print(f"File {file.filename} uploaded successfully to {file_path}")
-    except Exception as e:
-        print(f"Error while uploading: {e}")
-        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
 
 
 @app.post("/upload_image/{room_id}")
@@ -575,7 +513,7 @@ async def delete_image(request: Request, image_id: int)->HTMLResponse:
 
 @app.get("/contact")
 async def contact(request: Request)->HTMLResponse:
-    context = {}
+    context = {"login": True}
     user_id = None
     access_token = request.cookies.get("access_token")
     if access_token:

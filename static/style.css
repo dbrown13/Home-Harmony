@@ -48,11 +48,11 @@ label {
 textarea {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
-  text-align: center;
+  text-align: left;
   border-radius: 5px;
   border: 2px solid black;
 }
-
+  
 body {
   margin: 0px;
   background-color: rgb(178, 209, 198);
@@ -323,12 +323,6 @@ main {
   height: 100vh;
 }
 
-.open-button-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .open-button {
   background-color: #555;
   color: white;
@@ -436,6 +430,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 25%;
 }
 
 .card-content {
