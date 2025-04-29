@@ -323,6 +323,12 @@ main {
   height: 100vh;
 }
 
+.open-button-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .open-button {
   background-color: #555;
   color: white;

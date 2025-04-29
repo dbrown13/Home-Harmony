@@ -21,7 +21,6 @@ from passlib.hash import pbkdf2_sha256
 import jwt as jwt
 from pathlib import Path
 import os
-import requests
 
 
 # Initialize FastAPI
