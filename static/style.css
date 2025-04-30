@@ -139,6 +139,18 @@ main {
   background-color: rgb(114, 114, 114);
 }
 
+.delete-button {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: #880c1d;
+  font-family: inherit; 
+  margin: 0; 
+  border-radius: 8px;
+}
+
 * {
   box-sizing: border-box;
 }

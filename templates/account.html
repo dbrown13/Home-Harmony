@@ -19,8 +19,7 @@
         </div>
     </div>
     <hr>
-    <p>Username: {{ user.username }}</p>
-
+    <h4>Update username, password or both</h4>
     <div class="login-form">
         <div class="login-field">
             <form action="/account" method="post">
@@ -41,7 +40,7 @@
                 <br>
                 <input class="button" type="submit" value="Update Account">
                 <input class="button" type="button" value="Return" onclick="window.location.href='/home'">
-                <input href = "/delete_account" class="delete-button" type="button" value="Delete Account" onclick="return confirm('Are you sure you want to delete your account?');">
+                <a href="/delete_account" class="delete-button" type="button" onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</a>
                 <br>
             </form>
             {% if taken %}

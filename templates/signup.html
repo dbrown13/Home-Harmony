@@ -35,10 +35,11 @@
                     </div>
                 </div>
                 <br>
-                <input class="button is-primary" type="submit">
+                <input class="button" type="submit">
             </form>
+            <br>
             {% if taken %}
-                <div><b>Username {{ username }} is taken.  Pick a new username.</b></div>
+                <div><p><b>Username {{ username }} is taken.  Pick a new username.</b></p></div>
             {% endif %}
             <hr>
             <p>Already signed up?  <a href="/">Log in here!</a></p>

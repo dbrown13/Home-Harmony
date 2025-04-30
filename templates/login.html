@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Harmony - Log in</title>
-    <link
-        rel="stylesheet"
-        href="/static/style.css"
-    >
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <br>
@@ -45,6 +42,10 @@
             {% elif incorrect_password %}
                 <div>
                     <p><b>Password incorrect. Please try again.</b></p>
+                </div>
+            {% elif signup_success %}
+                <div>
+                    <p><b>Account created successfully! Please log in.</b></p>
                 </div>
             {% endif %}
         </div>

@@ -119,10 +119,8 @@ async def get_user_info(
     password : Annotated[str, Form()] = None,
     user_id : Annotated[int, Path()] = Depends(oauth_cookie),
     )->HTMLResponse:
-    print(f"APP - /get_account")
     #Verify account info
     user = get_user_by_id(connection, user_id)
-    print(f"username: {user.username}")
     if user is None:
         print("User not found")
         context = {"user": user, "incorrect_username": True}
@@ -132,7 +130,6 @@ async def get_user_info(
         context = {"user": user, "incorrect_password": True}
         return templates.TemplateResponse(request, "./get_account.html", context=context)
 
-    print("User found")
     context = {"user": user, "login": True}
     return templates.TemplateResponse(request, "./account.html", context=context)
 
@@ -144,29 +141,22 @@ async def get_user_info(
     password : Annotated[str, Form()] = None,
 )->HTMLResponse:
     print(f"user_id: {user_id} is requesting account update")
-    print(f"username: {username}")
-    print(f"password: {password}")
     user = get_user_by_id(connection, user_id)
     if user is None:
         return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
     # See if username changed
-    print("user is not None")
-    print(f"username: {username}")
-    print(f"user.username: {user.username}")
     # Remove leading and trailing whitespace from username
     user.username = user.username.strip()
     username = username.strip()
     if user.username != username:
         # Check if new username already exists
         existing_user = get_user(connection, username)
-        print(f"existing_user: {existing_user}")
         if existing_user is not None:
             return templates.TemplateResponse(request, "./account.html", context={'taken': True, 'user': user})
         # update username in user model
         user.username = username
     if password:
         # update password in user model
-        print(f"update password")
         user.hash_password = pbkdf2_sha256.hash(password + user.salt)
     # update user in database   
     update_user(connection, user) 
@@ -179,7 +169,6 @@ async def login(request: Request)->HTMLResponse:
 
 @app.post("/login")
 async def login_user(request: Request, username : Annotated[str, Form()], password : Annotated[str, Form()]):      
-    print(f"APP - /login")
     user = get_user(connection, username.strip())
     if user is None:
         return templates.TemplateResponse(request, "./index.html", context={'incorrect_username': True, 'username': username})
@@ -241,12 +230,13 @@ async def update_username(
     update_user(connection, user)
     return RedirectResponse("/account", status_code=status.HTTP_303_SEE_OTHER)
 
-@app.delete("/delete_acct")
-async def delete_acct(
+@app.get("/delete_account")
+async def delete_account(
     request: Request,
-    user: UserID = Depends(oauth_cookie),
+    userID: UserID = Depends(oauth_cookie),
 )->HTMLResponse:
-    delete_user(connection, user.user_id)
+    print(f"User {userID} is deleting account")
+    delete_user(connection, userID)
     return RedirectResponse("/", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get("/home")
@@ -371,7 +361,6 @@ async def room_images(request: Request, room_id: int)->HTMLResponse:
 async def confirm_delete(request: Request, room_id: int)->HTMLResponse:
     print(f"Confirm delete of room with id: {room_id}")
     room = get_room_by_id(connection, room_id)
-    print(room)
     return templates.TemplateResponse(request, "./confirm_delete.html", context={"request": request, "room_id": room_id, "room_name": room.room_name})
 
 @app.get("/delete_room/{room_id}")
@@ -415,7 +404,6 @@ async def upload_image_form(
     context = {"request": request, "room_id": room_id, "user_id": user_id, "login": user_id is not None, "image_msg": None} 
     assert isinstance(user_id, int) or user_id is None, "Invalid access token"
     print(f"Upload_image_form: User is requesting upload image form for room with id: {room_id}")
-    print(f"Context: {context}")
     return templates.TemplateResponse(request, "./upload_image.html", context=context)
 
 
@@ -427,7 +415,6 @@ async def upload(
     file: UploadFile = File(...),
     user_id: int = Depends(oauth_cookie),
     )->HTMLResponse:
-    print(f"filename: {file.filename}")
 
     filename = file.filename
     room_id = request.path_params["room_id"]
