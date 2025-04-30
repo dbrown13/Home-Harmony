@@ -48,8 +48,12 @@
                             <p class="card-text">{{ image.image_desc }}</p>
                         </div>
                         <footer class="card-footer">
-                            <button class="button"><a style="color: white;" href="/edit_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Edit Image</a></button>
-                            <button class="button"><a style="color: white;" href="/delete_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a></button>
+                            <div class="edit-button-div" style="padding: 5px;">
+                                <button class="button"><a style="color: white;" href="/edit_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Edit Image</a></button>
+                            </div>
+                            <div class="delete-button-div" style="padding: 5px;">
+                                <button class="button"><a style="color: white;" href="/delete_image/{{ room.room_id }}/{{ image.image_id }}" class="card-footer-item">Delete Image</a></button>
+                            </div>
                         </footer>
                     </div>
                     <br>
