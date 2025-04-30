@@ -49,7 +49,6 @@ def get_user_by_id(connection: Connection,
             """
             SELECT user_id, username, salt, hash_password
             FROM users
-            ORDER BY room_id ASC
             WHERE user_id = ?
             """,
             (user_id,),

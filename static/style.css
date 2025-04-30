@@ -323,6 +323,19 @@ main {
   height: 100vh;
 }
 
+.contact-form {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.open-button-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .open-button {
   background-color: #555;
   color: white;
@@ -527,10 +540,7 @@ main {
 .form-container .btn:hover, .open-buton:hover {
   opacity: 1;
 }
-  
-#myContactForm {
-  display: none;
-}
+
 
 #myPhotoForm {
   display: none;

@@ -24,6 +24,7 @@
             <a href="/edit_room/{{ room.room_id }}" class="button">Edit</a>
             <a href="/delete_room/{{ room.room_id }}" class="button">Delete</a>
           </div>
+          <br></br>
           
         {% endfor %}
       {% else %}
@@ -38,8 +39,12 @@
       <br></br>
       <hr></hr>
       <br></br>
+    </div>
+    <br></br>
        <form action="/add_room" method="get">
-        <button class="open-button" type="submit">Design a Room</button>
+        <div class="open-button-div">
+          <button class="open-button" type="submit">Design a Room</button>
+        </div>
       </form>
 <!--      <button class="open-button" onClick="roomForm()">Design a Room</button>
 
@@ -87,7 +92,7 @@
           <button type="submit" class="btn">Submit</button>
           <button type="button" class="btn cancel" onClick="closeForm()">Cancel</button>
         </form> -->
-      </div>
+      
     </main>
     <script src="/static/rooms.js"></script>
   </body>
