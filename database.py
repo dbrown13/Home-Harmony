@@ -35,7 +35,6 @@ def get_user(connection: Connection,
             (username,),
         )
         user = cur.fetchone()
-        print(f"Database: User: {user}")
         if user is None:
             return None
         return UserHashedIndex(**dict(user))
@@ -49,7 +48,6 @@ def get_user_by_id(connection: Connection,
             """
             SELECT user_id, username, salt, hash_password
             FROM users
-            ORDER BY room_id ASC
             WHERE user_id = ?
             """,
             (user_id,),
@@ -77,6 +75,7 @@ def update_user(connection: Connection,
 
 def delete_user(connection: Connection,
                 user_id: int)->bool:
+    print(f"Database: Deleting user: {user_id}")
     with connection: 
         cur = connection.cursor()
         cur.execute(
