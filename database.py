@@ -1,15 +1,25 @@
 import sqlite3
 from sqlite3 import Connection
-from typing import List, Union
-from pydantic import ValidationError
-from models import Room, Rooms, UserRoom, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images, UserRoomName, RoomNames
-from models import ImageJoin, ImageJoinList
+from typing import Union
+from models import Room, Rooms, UserRoomId, UserHashed, UserHashedIndex, UserImage, ImageRetrieve, ImageUpdate, Images, UserRoomName, RoomNames
+from models import ImageJoin
 import os
 import shutil
 
+#####################################################################################################
+# User functions (CRUD)                                                                             # 
+#####################################################################################################
+"""
+    This function creates a new user in the database.
+    Parameters: 
+        connection (Connection): The database connection to use.
+        user (UserHashed): The user to create.
+    Returns:
+        bool: True if the user was created successfully, False otherwise.
+"""
 def create_user(connection: Connection,
                 user: UserHashed)->bool:
-    with connection: 
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -19,12 +29,27 @@ def create_user(connection: Connection,
             """,
             user.model_dump()
         )
-    connection.commit()
-    return True
-def get_user(connection: Connection,
-             username: str)->Union[UserHashedIndex, None]:
-    print(f"Database: Getting user: {username}")
-    with connection: 
+        connection.commit()
+        return True
+    except sqlite3.IntegrityError:
+        print("Database: User already exists")
+        return False
+
+
+"""
+    This function retrieves a user from the database by their username.
+    Parameters: 
+        connection (Connection): The database connection to use.
+        username (str): The username of the user to retrieve.
+    Returns:
+        Union[UserHashedIndex, None]: The user if found, None otherwise.
+"""
+# Get User from database by username
+def get_user(
+        connection: Connection,
+        username: str
+)->Union[UserHashedIndex, None]:
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -38,11 +63,21 @@ def get_user(connection: Connection,
         if user is None:
             return None
         return UserHashedIndex(**dict(user))
-    
+    except sqlite3.Error as e:
+        print(f"Database: Error getting user: {e}")
+        return None
+
+"""
+    This function retrieves a user from the database by their user_id.
+    Parameters: 
+        connection (Connection): The database connection to use.
+        user_id (int): The id of the user to retrieve.
+    Returns:
+        Union[UserHashedIndex, None]: The user if found, None otherwise.
+"""
 def get_user_by_id(connection: Connection,
                    user_id: int)->Union[UserHashedIndex, None]:
-    print(f"Database: Getting user by id: {user_id}")
-    with connection: 
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -55,12 +90,20 @@ def get_user_by_id(connection: Connection,
         user = cur.fetchone()
         if user is None:
             return None
+        # Return the user as a UserHashedIndex object - unpacked 
         return UserHashedIndex(**dict(user))
-    
+    except sqlite3.Error as e:
+        print(f"Database: Error getting user by id: {e}")
+        return None
+
+"""
+    This function updates a user in the database.
+    Parameters: 
+        connection (Connection): The database connection to use.
+"""
 def update_user(connection: Connection,
                    user: UserHashed)->bool:
-    with connection: 
-        print(f"Database: Updating user: {user}")
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -70,13 +113,23 @@ def update_user(connection: Connection,
             """,
             (user.username, user.salt, user.hash_password, user.user_id)
         )
-    connection.commit()
-    return True
+        connection.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Database: Error updating user: {e}")
+        return False
 
+"""
+    This function deletes a user from the database.
+    Parameters: 
+        connection (Connection): The database connection to use.
+        user_id (int): The id of the user to delete.
+    Returns:
+        bool: True if the user was deleted successfully, False otherwise.
+"""
 def delete_user(connection: Connection,
                 user_id: int)->bool:
-    print(f"Database: Deleting user: {user_id}")
-    with connection: 
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -85,14 +138,25 @@ def delete_user(connection: Connection,
             """,
             (user_id,),
         )
-    connection.commit()
-    return True
-                
-
+        connection.commit()
+        return True
+    except sqlite3.Error as e:
+        print(f"Database: Error deleting user: {e}")
+        return False
+#####################################################################################################
+# Room functions (CRUD)                                                                             # 
+#####################################################################################################
+"""
+    This function creates a new room in the database.
+    Parameters:
+        connection (Connection): The database connection to use.
+        room (UserRoomId): The room to create.
+    Returns:
+        bool: True if the room was created successfully, False otherwise.
+"""
 def create_new_room(connection: Connection, 
                    room: UserRoomId):
-    with connection:
-        print(f"Creating new room: {room}")
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -103,9 +167,21 @@ def create_new_room(connection: Connection,
             room.model_dump()
         )
         connection.commit()
+        return True
+    except sqlite3.IntegrityError:
+        print("Database: Room already exists")
+        return False
 
+"""
+    This function retrieves a room from the database by their room_id.
+    Parameters:
+        connection (Connection): The database connection to use.
+        room_id (int): The id of the room to retrieve.
+    Returns:
+        Union[Room, None]: The room if found, None otherwise.
+"""
 def get_rooms(connection: Connection)->Rooms:
-    with connection:
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -114,10 +190,20 @@ def get_rooms(connection: Connection)->Rooms:
             """
         )
         return Rooms(rooms = [Room.model_validate(dict(room)) for room in cur])
+    except sqlite3.Error as e:
+        print(f"Database: Error getting rooms: {e}")
+        return None
 
+"""
+    This function retrieves all rooms from the database for a user_id.
+    Parameters:
+        connection (Connection): The database connection to use.
+        user_id (int): user_id of the user whose rooms to retrieve.
+    Returns:
+        Rooms: List of rooms if found, None otherwise.
+"""
 def get_user_rooms(connection: Connection, user_id: int)->Rooms:
-    print(f"Getting rooms for user_id: {user_id}")
-    with connection:
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -128,10 +214,20 @@ def get_user_rooms(connection: Connection, user_id: int)->Rooms:
             (user_id,),
         )
         return Rooms(rooms = [Room.model_validate(dict(room)) for room in cur])
-        #return cur.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database: Error getting user rooms: {e}")
+        return None
 
+"""
+    This function retrieves a room by room_id.
+    Parameters:
+        connection (Connection): The database connection to use.
+        room_id (int): The id of the room to retrieve.
+    Returns:
+        Room: The room if found, None otherwise.
+"""
 def get_room_by_id(connection: Connection, room_id: int)->Room:
-    with connection:
+    try:
         cur = connection.cursor()
         cur.execute(
             """
@@ -142,8 +238,10 @@ def get_room_by_id(connection: Connection, room_id: int)->Room:
             """,
             (room_id,),
         )
-        #return cur.fetchone()
         return Room.model_validate(dict(cur.fetchone()))
+    except sqlite3.Error as e:
+        print(f"Database: Error getting room by id: {e}")
+        return None
 
 def update_room_by_id(
         connection: Connection, 

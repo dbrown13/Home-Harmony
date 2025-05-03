@@ -22,7 +22,7 @@
             <p>Description: {{ room.room_desc }}</p>
 
             <a href="/edit_room/{{ room.room_id }}" class="button">Edit</a>
-            <a href="/delete_room/{{ room.room_id }}" class="button">Delete</a>
+            <a href="/delete_room/{{ room.room_id }}" class="button" onclick="return confirm('Are you sure you want to delete this room?')">Delete</a>
           </div>
           
         {% endfor %}
