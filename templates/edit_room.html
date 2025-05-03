@@ -23,88 +23,90 @@
         <div class="column">
             <form action="/edit_room/{{ room.room_id }}" method="post">
                 <div class="field">
-                    <label class="label" for="room_name">Room Name</label>
-                    <div class="control">
+                    <label class="add-room-label label" for="room_name">Room Name</label>
+                    <div class="control add-room-field">
                         <input class="input" type="text" name="room_name" value="{{ room.room_name }}" placeholder="Enter name of room ...">
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label" for="room_desc">Room Theme / Description</label>
-                    <div class="control">
+                    <label class="add-room-label label" for="room_desc">Room Theme / Description</label>
+                    <div class="control add-room-field">
                         <textarea class="textarea" rows="3" cols="50" name="room_desc" placeholder="Enter description of room ...">{{ room.room_desc }}</textarea>
                     </div>
                 </div>
                 <div class="column">
                     <div class="field">
-                        <label class="label" for="room_num_walls">Number of Walls to Decorate</label>
-                        <div class="control">
+                        <label class="label add-room-label" for="room_num_walls">Number of Walls to Decorate</label>
+                        <div class="control add-room-field">
                             <input class="input" type="number" value="{{ room.room_num_walls }}" name="room_num_walls" placeholder="Enter number of walls to decorate..." min="1" max="4" size="20">
                         </div>
                     </div>
                     <hr>
-                    <style>
-                        .three-columns {
-                            column-count: 3;
-                        }
-                        .two-columns {
-                            column-count: 2;
-                        }
-                    </style>
-                    <div class="three-columns">
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_wall_color1">Main Wall Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color1 }}" name="room_wall_color1" value="#FFFFFF">
+                    <div class="column-container">
+                        <div class="three-columns">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_wall_color1">Main Wall Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color1 }}" name="room_wall_color1" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_wall_color2">Accent Wall Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color2 }}" name="room_wall_color2" value="#FFFFFF">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_wall_color2">Accent Wall Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" value="{{ room.room_wall_color2 }}" name="room_wall_color2" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="three-columns">
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_ceiling_color">Ceiling Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_ceiling_color }}" name="room_ceiling_color" value="#FFFFFF">
+                    <div class="column-container">
+                        <div class="three-columns">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_ceiling_color">Ceiling Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" value="{{ room.room_ceiling_color }}" name="room_ceiling_color" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_floor_color">Floor Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_floor_color }}" name="room_floor_color" value="#FFFFFF">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_floor_color">Floor Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" value="{{ room.room_floor_color }}" name="room_floor_color" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <label class="label" for="room_trim_color">Trim Color</label>
-                                <div class="control">
-                                    <input class="input" type="color" id="myColorInput" value="{{ room.room_trim_color }}" name="room_trim_color" value="#FFFFFF">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label" for="room_trim_color">Trim Color</label>
+                                    <div class="control">
+                                        <input class="input" type="color" id="myColorInput" value="{{ room.room_trim_color }}" name="room_trim_color" value="#FFFFFF">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <hr>
                     <div class="field">
-                        <label class="label" for="room_other_details">Other Details</label>
-                        <div class="control">
-                            <textarea class="textarea" rows="3" cols="50" name="room_other_details" placeholder="Enter any additional details...">{{ room.room_other_details }}</textarea>
+                        <label class="label add-room-label" for="room_other_details">Other Details</label>
+                        <div class="control add-room-field">
+                            <textarea class="textarea" rows="5" cols="100" name="room_other_details" placeholder="Enter any additional details...">{{ room.room_other_details }}</textarea>
                         </div>
                     </div>
                 </div> 
                 <br>
-                <input class="button" type="submit">
-                <a href="/room_images/{{ room.room_id }}" class="button">Images</a>
-                <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()">
+                <div class="center-container">
+                    <div class="vertical-center horizontal-center">
+                        <input class="button" type="submit">
+                        <a href="/room_images/{{ room.room_id }}" class="button">Images</a>
+                        <input class="button is-light" type="button" value="Cancel" onclick="window.history.back()">
+                    </div>
+                </div>
             </form>
         </div>
     </div>

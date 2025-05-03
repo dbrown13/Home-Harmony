@@ -25,7 +25,7 @@ import base64
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Set up database onnection
+# Set up database connection
 connection = Connection('harmony.db')
 connection.row_factory = Row
 
@@ -442,7 +442,15 @@ async def edit_room(
     request: Request,
     room_name : Annotated[str, Form()], 
     room_desc : Annotated[str, Form()],
-    user_id : int  = Depends(oauth_cookie))-> HTMLResponse:
+    room_num_walls : Annotated[int, Form()],
+    room_wall_color1 : Annotated[str, Form()],
+    room_wall_color2 : Annotated[str, Form()],
+    room_ceiling_color : Annotated[str, Form()],
+    room_floor_color : Annotated[str, Form()],
+    room_trim_color : Annotated[str, Form()],
+    room_other_details : Annotated[str, Form()],
+    user_id : int  = Depends(oauth_cookie)
+)-> HTMLResponse:
     room_id = request.path_params["room_id"]
     print(f"User is editing room with id: {room_id} and new name: {room_name}, description: {room_desc}")
     # Update room in database
@@ -450,8 +458,16 @@ async def edit_room(
         room_id = room_id,
         room_name = room_name,
         room_desc = room_desc,
+        room_num_walls = room_num_walls,
+        room_wall_color1 = room_wall_color1,
+        room_wall_color2 = room_wall_color2,
+        room_ceiling_color = room_ceiling_color,
+        room_floor_color = room_floor_color,
+        room_trim_color = room_trim_color,
+        room_other_details = room_other_details,
         user_id = user_id)
     update_room_by_id(connection, room)
+    print("after database update")
     return RedirectResponse("/rooms", status_code=status.HTTP_303_SEE_OTHER)
 
 """ 
