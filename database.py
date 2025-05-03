@@ -246,7 +246,8 @@ def get_room_by_id(connection: Connection, room_id: int)->Room:
 def update_room_by_id(
         connection: Connection, 
         room: Room)->bool:
-    
+    print(f"Updating room: {room}")
+    print(f"Room Name: {room.room_name}, Room Description: {room.room_desc}  ")
     with connection:
         cur = connection.cursor()
         cur.execute(
