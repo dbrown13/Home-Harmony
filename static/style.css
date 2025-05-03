@@ -335,6 +335,20 @@ main {
   height: 100vh;
 }
 
+.contact-form {
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.contact-form-container {
+  border: 10px solid black;
+  border-radius: 5px;
+}
+
 .open-button {
   background-color: #555;
   color: white;
@@ -532,6 +546,15 @@ main {
   opacity:0.8; 
 }
 
+.btn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  font-family: inherit; 
+  margin: 0; 
+  border-radius: 8px;
+}
+
 .form-container .cancel {
   background-color: rgb(151, 22, 22);
 }
@@ -540,10 +563,6 @@ main {
   opacity: 1;
 }
   
-#myContactForm {
-  display: none;
-}
-
 #myPhotoForm {
   display: none;
 }
